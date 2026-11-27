@@ -25,7 +25,7 @@ a{color:var(--red)}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
 .brand{font-family:var(--serif);font-weight:600;font-size:clamp(34px,6.5vw,58px);letter-spacing:.14em;text-transform:uppercase;line-height:1}
 .top p{margin:12px 0 0;color:#cfc9c2;max-width:46ch;font-size:15px}
-.dots{width:clamp(110px,20vw,190px);height:auto;display:block}
+.dots{width:clamp(120px,24vw,230px);height:auto;display:block}
 .tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-top:clamp(20px,3vw,32px);padding-bottom:14px}
 .tabs a{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:10px 16px 10px 12px;border-radius:999px;min-height:46px;display:flex;align-items:center;gap:10px;border:1px solid #2a2a2a;transition:background .2s,color .2s}
 .tabs a:hover{border-color:#555}
@@ -40,7 +40,8 @@ a{color:var(--red)}
 .band{padding:clamp(26px,4vw,48px) max(5vw,16px) 40px}
 section[hidden]{display:none}
 .head{display:flex;gap:16px;align-items:center;margin-bottom:22px}
-.head .disc{width:54px;height:54px;border-radius:50%;flex:none;box-shadow:inset -6px -8px 14px rgba(0,0,0,.12)}
+.head .art{width:64px;height:64px;border-radius:20px;background:#0A0A0A;flex:none;display:grid;place-items:center;padding:9px;border:1px solid light-dark(#0A0A0A,#2a2a2a)}
+.head .art svg{width:100%;height:100%;display:block}
 .head h2{font-size:clamp(26px,4.4vw,36px);letter-spacing:.12em;text-transform:uppercase}
 .head p{margin:4px 0 0;color:var(--mute);font-size:15px}
 .board{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(16px,3vw,28px);box-shadow:0 1px 0 var(--line),0 20px 40px -32px rgba(0,0,0,.35)}
@@ -74,6 +75,10 @@ button:disabled{opacity:.55;cursor:wait}
 .item.low::before{background:var(--red)}
 .item.low .nm::after{content:"quasi finito";font-size:11px;font-weight:700;color:var(--red);background:var(--redsoft);border-radius:99px;padding:2px 8px;margin-left:8px;white-space:nowrap;text-transform:none}
 .emptybox{padding:32px 18px;text-align:center;color:var(--mute)}
+.emptyart{display:grid;justify-items:center;gap:6px;padding:26px 18px 30px;text-align:center;color:var(--mute)}
+.emptyart .pl{width:min(260px,70%);background:#0A0A0A;border-radius:22px;padding:18px 22px}
+.emptyart svg{width:100%;height:auto;display:block}
+.emptyart p{margin:8px 0 0;max-width:36ch;font-size:15px}
 .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;align-items:center}
 .tools input{flex:1 1 220px;width:auto}
 
@@ -151,22 +156,37 @@ details.steps li::marker{color:var(--red);font-weight:700}
 .date{font-size:13px;color:var(--mute)}
 .more{margin-top:26px;display:flex;justify-content:center}
 .more[hidden]{display:none}
-.skel{height:480px;border-radius:24px;background:linear-gradient(90deg,var(--soft),var(--line),var(--soft));background-size:200% 100%;animation:sh 1.4s infinite linear}
+.skel{border-radius:24px;background:#0A0A0A;grid-column:1/-1;display:grid;justify-items:center;padding:28px 18px 22px;color:#cfc9c2}
+.skel .potsvg{width:min(220px,60%);height:auto;overflow:visible}
+.skel p{margin:10px 0 0;font-size:15px}
+.skel .b{transform-box:fill-box;transform-origin:center;animation:bub 1.6s ease-in-out infinite}
+.skel .b2{animation-delay:.2s}.skel .b3{animation-delay:.4s}
+@keyframes bub{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-14%) scale(1.08)}}
 @keyframes sh{to{background-position:-200% 0}}
-@media(prefers-reduced-motion:reduce){.skel{animation:none}*{transition:none!important}}
+@media(prefers-reduced-motion:reduce){.skel .b,.splash *{animation:none!important}*{transition:none!important}}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#0a0a0a;color:#fff;padding:12px 14px 12px 18px;border-radius:999px;display:flex;gap:14px;align-items:center;box-shadow:0 14px 34px rgba(0,0,0,.3);max-width:calc(100vw - 24px);z-index:9;font-size:14px}
 .toast[hidden]{display:none}
 .toast button{background:var(--yel);color:#111;min-height:34px;padding:4px 14px;flex:none}
+.splash{position:fixed;inset:0;z-index:50;background:#0A0A0A;display:grid;place-items:center;animation:spOut .45s ease-in 1.35s forwards}
+.splash svg{width:min(62vw,300px);height:auto;overflow:visible;animation:spZoom .45s ease-in 1.35s forwards}
+.splash .sb{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:pop .5s cubic-bezier(.2,1.6,.4,1) forwards}
+.splash .ss{transform-box:fill-box;transform-origin:center;transform:scale(0);opacity:0;animation:pop .35s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes pop{to{transform:scale(1);opacity:1}}
+@keyframes spOut{to{opacity:0;visibility:hidden}}
+@keyframes spZoom{to{transform:scale(1.25)}}
 footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-top:1px solid var(--line)}
 @media(max-width:600px){
   .hero{grid-template-columns:minmax(0,1fr) 92px}
-  .dots{width:92px}
+  .dots{width:112px}
   .addrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .addrow #nome{grid-column:1/-1}.addrow button{grid-column:1/-1}
   .item{grid-template-columns:10px minmax(0,1fr) 72px 66px 38px;gap:6px;padding:8px 10px}
   .item::before{width:10px;height:10px}
-  .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
-  .tabs a{padding:8px 10px;font-size:14px;justify-content:center;text-transform:capitalize;gap:7px}
+  .tabs{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.1fr)}
+  .tabs{gap:5px}
+  .tabs a{padding:8px 4px;font-size:13.5px;justify-content:center;text-transform:capitalize;gap:5px;min-height:44px}
+  .tabs a i{width:11px;height:11px}
+  .cnt{font-size:11px;padding:0 6px}
   .tabs .x{display:none}
   .kcal{grid-template-columns:1fr;justify-items:center}
   .kcal>div:last-child{width:100%}
@@ -174,24 +194,14 @@ footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-t
 </style>
 </head>
 <body>
+<div class="splash" id="splash" aria-hidden="true"><svg viewBox="740 190 1100 1060"><circle class="sb" style="animation-delay:0ms" cx="1095" cy="527" r="192" fill="#F0A21A"/><circle class="sb" style="animation-delay:90ms" cx="1479" cy="527" r="192" fill="#E3170A"/><circle class="sb" style="animation-delay:180ms" cx="1096" cy="910" r="192" fill="#FFD900"/><circle class="sb" style="animation-delay:270ms" cx="1480" cy="911" r="192" fill="#F4B6C6"/><circle class="ss" style="animation-delay:380ms" cx="1113" cy="1196" r="16" fill="#F4B6C6"/><circle class="ss" style="animation-delay:415ms" cx="794" cy="616" r="28" fill="#F0A21A"/><circle class="ss" style="animation-delay:450ms" cx="1288" cy="328" r="28" fill="#F0A21A"/><circle class="ss" style="animation-delay:485ms" cx="1435" cy="240" r="17" fill="#F0A21A"/><circle class="ss" style="animation-delay:520ms" cx="896" cy="719" r="29" fill="#E3170A"/><circle class="ss" style="animation-delay:555ms" cx="1736" cy="467" r="18" fill="#E3170A"/><circle class="ss" style="animation-delay:590ms" cx="1692" cy="313" r="29" fill="#E3170A"/><circle class="ss" style="animation-delay:625ms" cx="895" cy="1106" r="16" fill="#FFD900"/><circle class="ss" style="animation-delay:660ms" cx="1679" cy="719" r="27" fill="#FFD900"/><circle class="ss" style="animation-delay:695ms" cx="1781" cy="816" r="28" fill="#F4B6C6"/><circle class="ss" style="animation-delay:730ms" cx="886" cy="329" r="16" fill="#F4B6C6"/><circle class="ss" style="animation-delay:765ms" cx="1288" cy="1128" r="27" fill="#FFFFFF"/><circle class="ss" style="animation-delay:800ms" cx="1684" cy="1106" r="16" fill="#FFFFFF"/></svg></div>
 <header class="top"><div class="wrap">
   <div class="hero">
     <div>
       <h1 class="brand">Cosa cucino</h1>
       <p>Il tuo magazzino, ricette create su misura per te e le preferite da rifare.</p>
     </div>
-    <svg class="dots" viewBox="0 0 200 200" aria-hidden="true">
-      <defs>
-        <radialGradient id="gO" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e8b52a"/><stop offset=".6" stop-color="#f0a21a"/><stop offset="1" stop-color="#d98a0c"/></radialGradient>
-        <radialGradient id="gR" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ff2a12"/><stop offset=".7" stop-color="#e3170a"/><stop offset="1" stop-color="#b80f05"/></radialGradient>
-        <radialGradient id="gY" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffe94d"/><stop offset=".7" stop-color="#ffd900"/><stop offset="1" stop-color="#f2c400"/></radialGradient>
-        <radialGradient id="gP" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fbd3de"/><stop offset=".7" stop-color="#f4b6c6"/><stop offset="1" stop-color="#e79fb3"/></radialGradient>
-      </defs>
-      <circle cx="58" cy="58" r="46" fill="url(#gO)"/>
-      <circle cx="142" cy="58" r="46" fill="url(#gR)"/>
-      <circle cx="58" cy="142" r="46" fill="url(#gY)"/>
-      <circle cx="142" cy="142" r="46" fill="url(#gP)"/>
-    </svg>
+    <svg class="dots" aria-hidden="true" preserveAspectRatio="xMaxYMid meet" viewBox="1320 140 1140 1150"><circle cx="1666" cy="521" r="320" fill="#F0A21A"/><circle cx="2159" cy="400" r="195" fill="#E3170A"/><circle cx="1725" cy="1058" r="207" fill="#FFD900"/><circle cx="2271" cy="757" r="175" fill="#FFD900"/><circle cx="2098" cy="1065" r="170" fill="#F4B6C6"/><circle cx="1933" cy="1239" r="57" fill="#FFFFFF"/><circle cx="2316" cy="995" r="47" fill="#FFFFFF"/><circle cx="1478" cy="893" r="58" fill="#FFFFFF"/><circle cx="1926" cy="850" r="47" fill="#FFFFFF"/><circle cx="2012" cy="727" r="58" fill="#FFFFFF"/><circle cx="2388" cy="531" r="58" fill="#FFFFFF"/><circle cx="1945" cy="227" r="62" fill="#FFFFFF"/></svg>
   </div>
   <nav class="tabs" aria-label="Sezioni">
     <a href="#magazzino" data-t="magazzino"><i></i><span class="x">Il mio </span>magazzino <span class="cnt" id="c-mag">0</span></a>
@@ -204,7 +214,7 @@ footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-t
 
 <!-- 1. MAGAZZINO -->
 <section id="v-magazzino" aria-labelledby="h-mag">
-  <div class="head"><span class="disc" style="background:var(--yel)"></span><div><h2 id="h-mag">Il mio magazzino</h2><p>Cosa hai in frigo e in dispensa, con le quantità.</p></div></div>
+  <div class="head"><span class="art"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="30" cy="30" r="19" fill="#F0A21A"/><circle cx="70" cy="30" r="19" fill="#E3170A"/><circle cx="30" cy="70" r="19" fill="#FFD900"/><circle cx="70" cy="70" r="19" fill="#F4B6C6"/></svg></span><div><h2 id="h-mag">Il mio magazzino</h2><p>Cosa hai in frigo e in dispensa, con le quantità.</p></div></div>
   <div class="board">
     <form id="fadd" autocomplete="off">
       <label class="l" for="nome">Aggiungi un ingrediente</label>
@@ -226,7 +236,7 @@ footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-t
 
 <!-- 2. CREA -->
 <section id="v-crea" aria-labelledby="h-crea" hidden>
-  <div class="head"><span class="disc" style="background:var(--red)"></span><div><h2 id="h-crea">Crea ricette</h2><p>Ricette nuove ogni volta, con quello che hai, per 1 persona.</p></div></div>
+  <div class="head"><span class="art"><svg aria-hidden="true" viewBox="780 160 1016 1110"><path d="M966 896 H1610 A322 322 0 0 1 966 896 Z" fill="#E3170A"/><rect x="836" y="896" width="110" height="67" rx="14" fill="#E3170A"/><rect x="1630" y="896" width="110" height="67" rx="14" fill="#E3170A"/><circle cx="1288" cy="724" r="129" fill="#FFD900"/><circle cx="1288" cy="455" r="86" fill="#F0A21A"/><circle cx="1288" cy="263" r="54" fill="#F4B6C6"/></svg></span><div><h2 id="h-crea">Crea ricette</h2><p>Ricette nuove ogni volta, con quello che hai, per 1 persona.</p></div></div>
   <div class="board">
     <div class="kcal">
       <div class="plate" aria-hidden="true"><div><b id="kcalv">600</b><small>kcal</small></div></div>
@@ -275,7 +285,7 @@ footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-t
 
 <!-- 3. SALVATE -->
 <section id="v-salvate" aria-labelledby="h-sav" hidden>
-  <div class="head"><span class="disc" style="background:var(--pink)"></span><div><h2 id="h-sav">Ricette salvate</h2><p>Le ricette che ti sono piaciute, sempre a portata di mano.</p></div></div>
+  <div class="head"><span class="art"><svg aria-hidden="true" viewBox="900 340 780 760"><rect x="946" y="596" width="320" height="462" rx="40" fill="#FFFFFF"/><rect x="1310" y="596" width="321" height="462" rx="40" fill="#FFFFFF"/><path d="M1157 704 L1010 505 A88 88 0 0 1 1157 420 A88 88 0 0 1 1304 505 Z" fill="#F4B6C6"/><circle cx="1417" cy="520" r="44" fill="#E3170A"/><circle cx="1524" cy="467" r="42" fill="#FFD900"/></svg></span><div><h2 id="h-sav">Ricette salvate</h2><p>Le ricette che ti sono piaciute, sempre a portata di mano.</p></div></div>
   <div class="tools" style="margin-top:0;margin-bottom:16px"><input id="cerca-sav" type="search" placeholder="Cerca una ricetta o un ingrediente" aria-label="Cerca nelle ricette salvate"></div>
   <div class="grid" id="saved"></div>
 </section>
@@ -296,6 +306,9 @@ const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.
 const num=v=>{const n=parseFloat(String(v??'').replace(',','.'));return isFinite(n)?n:0};
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
 const fmt=n=>{const r=Math.round(n*10)/10;return String(r).replace('.',',')};
+const PLATE='<svg aria-hidden="true" viewBox="540 200 1500 1040"><g fill="#FFFFFF"><rect x="597" y="334" width="124" height="256" rx="24"/><rect x="635" y="560" width="48" height="545" rx="24"/></g><g fill="#0A0A0A"><rect x="621" y="300" width="14" height="190" rx="7"/><rect x="683" y="300" width="14" height="190" rx="7"/></g><path d="M1980 360 V1081 a24 24 0 0 1 -48 0 V765 h-19 a24 24 0 0 1 -24 -24 V405 a71 71 0 0 1 67 -71 a24 24 0 0 1 24 26 Z" fill="#FFFFFF"/><circle cx="1288" cy="719" r="477" fill="#FFFFFF"/><circle cx="1288" cy="719" r="279" fill="#E3E3E3"/><circle cx="1608" cy="356" r="119" fill="#0A0A0A"/><circle cx="1608" cy="356" r="99" fill="#F4B6C6"/></svg>';
+const POT='<svg aria-hidden="true" class="potsvg" viewBox="780 160 1016 1110"><path d="M966 896 H1610 A322 322 0 0 1 966 896 Z" fill="#E3170A"/><rect x="836" y="896" width="110" height="67" rx="14" fill="#E3170A"/><rect x="1630" y="896" width="110" height="67" rx="14" fill="#E3170A"/><circle class="b b1" cx="1288" cy="724" r="129" fill="#FFD900"/><circle class="b b2" cx="1288" cy="455" r="86" fill="#F0A21A"/><circle class="b b3" cx="1288" cy="263" r="54" fill="#F4B6C6"/></svg>';
+const emptyArt=t=>`<div class="emptyart"><div class="pl">${PLATE}</div><p>${t}</p></div>`;
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
 /* ---------- stato ---------- */
@@ -327,7 +340,7 @@ function renderMag(){
       <input type="number" inputmode="decimal" min="0" step="any" value="${esc(x.q)}" aria-label="Quantità di ${esc(x.n)}" data-f="q">
       <select aria-label="Unità di ${esc(x.n)}" data-f="u">${['g','kg','ml','l','pz'].map(u=>`<option${u===x.u?' selected':''}>${u}</option>`).join('')}</select>
       <button type="button" class="del" aria-label="Togli ${esc(x.n)}">×</button>
-    </div>`}).join(''):'<div class="emptybox">Nessun ingrediente con questo nome.</div>'):'<div class="emptybox">Il magazzino è vuoto. Aggiungi qui sopra quello che hai in casa.</div>';
+    </div>`}).join(''):'<div class="emptybox">Nessun ingrediente con questo nome.</div>'):emptyArt('Il magazzino è vuoto. Aggiungi qui sopra quello che hai in casa.');
   const have=new Set(mag.map(x=>norm(x.n)));
   $('#sugg').innerHTML=QUICK.filter(([n])=>!have.has(n)).slice(0,10).map(([n,q,u])=>`<button type="button" data-n="${esc(n)}" data-q="${q}" data-u="${u}">+ ${esc(n)} ${esc(fmt(q))} ${esc(u)}</button>`).join('');
   saveMag();
@@ -650,7 +663,7 @@ $('#saved').addEventListener('click',e=>onCard(e,()=>saved));
 function renderSaved(){
   const q=norm($('#cerca-sav').value);
   const list=saved.filter(r=>!q||norm(r.nome+' '+(r.ingredienti||[]).map(x=>x.nome).join(' ')).includes(q));
-  $('#saved').innerHTML=saved.length?(list.length?list.map(r=>card(r,'saved')).join(''):'<div class="emptybox">Nessuna ricetta salvata corrisponde.</div>'):'<div class="emptybox" style="grid-column:1/-1">Non hai ancora ricette salvate. In <a href="#crea" style="font-weight:600">Crea ricette</a> premi “Mi piace, salvala” su quelle che ti piacciono.</div>';
+  $('#saved').innerHTML=saved.length?(list.length?list.map(r=>card(r,'saved')).join(''):'<div class="emptybox">Nessuna ricetta salvata corrisponde.</div>'):'<div style="grid-column:1/-1">'+emptyArt('Non hai ancora ricette salvate. In <a href="#crea" style="font-weight:600">Crea ricette</a> premi “Mi piace, salvala” su quelle che ti piacciono.')+'</div>';
 }
 $('#cerca-sav').addEventListener('input',renderSaved);
 
@@ -664,7 +677,7 @@ async function crea(more){
   if(!badge()){st.textContent='Prima collega l\'AI: bastano due minuti, segui i passaggi qui sopra.';$('#key').focus();return}
   if(!more){shown=[];recs=[];out.innerHTML=''}
   busy=true;['#crea','#altre'].forEach(s=>$(s).disabled=true);$('#crea').textContent='Sto cucinando le idee…';
-  out.insertAdjacentHTML('beforeend','<div class="skel"></div><div class="skel"></div><div class="skel"></div>');
+  out.insertAdjacentHTML('beforeend',`<div class="skel cook">${POT}<p>Sto mescolando gli ingredienti…</p></div>`);
   ctl=new AbortController();const t0=Date.now();let cur='';
   const tick=()=>{st.textContent=`Sto inventando 3 ricette da circa ${kc.value} kcal… ${Math.round((Date.now()-t0)/1000)} s${cur?` · ${cur}`:''}`};
   tick();const iv=setInterval(tick,1000);$('#stop').hidden=false;
@@ -693,6 +706,8 @@ $('#diagbtn').addEventListener('click',diagnose);
 $('#altre').addEventListener('click',()=>crea(true));
 
 renderMag();saveSaved();route();
+setTimeout(()=>{const s=$('#splash');if(s)s.remove()},2000);
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){const s=$('#splash');if(s)s.remove()}
 }
 </script>
 </body>
