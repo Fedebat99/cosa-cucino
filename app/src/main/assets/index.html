@@ -93,6 +93,7 @@ input[type=range]{width:100%;margin:10px 0 2px;accent-color:var(--ora);height:28
 .extra{margin-top:12px}
 .uses{margin-top:16px;font-size:14px;color:var(--mute);padding:10px 14px;border-radius:14px;background:var(--yelsoft)}
 .uses a{font-weight:700}
+.go [hidden]{display:none}
 .go{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;align-items:center}
 .go .btn-tom{font-size:16px;padding:14px 28px;letter-spacing:.02em;box-shadow:0 12px 24px -14px rgba(227,23,10,.8)}
 .one{font-size:13px;color:var(--mute)}
@@ -245,6 +246,7 @@ footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-t
     <div class="uses" id="uses"></div>
     <div class="go">
       <button class="btn-tom" id="crea" type="button">Crea ricette</button>
+      <button class="btn-ghost" id="stop" type="button" hidden>Annulla</button>
       <span class="one">Dosi sempre per 1 persona</span>
     </div>
     <details class="set" id="set">
@@ -257,6 +259,8 @@ footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-t
       </ol>
       <div class="row"><input id="key" type="password" placeholder="Incolla la chiave Gemini" aria-label="Chiave API Gemini"><button type="button" class="btn-ghost" id="savekey">Salva</button></div>
       <p id="keymsg" style="margin:6px 0 0" aria-live="polite"></p>
+      <button type="button" class="btn-ghost sm" id="diagbtn" style="margin-top:10px">Verifica collegamento</button>
+      <pre id="diag" style="white-space:pre-wrap;font:13px/1.5 var(--sans);color:var(--mute);margin:8px 0 0" aria-live="polite"></pre>
     </details>
   </div>
   <p class="status" id="status" aria-live="polite"></p>
@@ -400,31 +404,87 @@ $('#savekey').addEventListener('click',()=>{
 badge();
 
 const API='https://generativelanguage.googleapis.com/v1beta/';
+let ctl=null;
+async function fetchT(url,opts,ms){
+  const own=new AbortController();const t=setTimeout(()=>own.abort('timeout'),ms);
+  const onStop=()=>own.abort('stop');if(ctl)ctl.signal.addEventListener('abort',onStop);
+  try{return await fetch(url,{...opts,signal:own.signal})}
+  catch(e){const err=new Error(own.signal.reason==='stop'?'stop':own.signal.reason==='timeout'?'timeout':'rete');err.kind=err.message;throw err}
+  finally{clearTimeout(t);if(ctl)ctl.signal.removeEventListener('abort',onStop)}
+}
+async function gErr(r){try{const j=await r.json();return (j.error&&j.error.message)||''}catch(e){return ''}}
+const keyBad=(s,msg)=>s===401||s===403||(s===400&&/api key|api_key/i.test(msg||''));
 async function models(){
   const cached=store.get('cc-models',null);if(Array.isArray(cached)&&cached.length)return cached;
   let list=[];
   try{
-    const r=await fetch(API+'models?pageSize=200',{headers:{'x-goog-api-key':getKey()}});
-    if(r.status===400||r.status===401||r.status===403){const e=new Error('key');e.status=r.status;throw e}
+    const r=await fetchT(API+'models?pageSize=200',{headers:{'x-goog-api-key':getKey()}},20000);
+    if(!r.ok){const msg=await gErr(r);if(keyBad(r.status,msg)){const e=new Error('key');e.status=r.status;e.detail=msg;throw e}}
     const j=await r.json();
     list=(j.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
       .map(m=>m.name.replace('models/','')).filter(n=>/^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(n))
       .sort((a,b)=>{const la=a.endsWith('lite'),lb=b.endsWith('lite');if(la!==lb)return la?1:-1;return parseFloat(b.split('-')[1])-parseFloat(a.split('-')[1])});
-  }catch(e){if(e.message==='key')throw e}
-  list=[...new Set([...list,'gemini-3.5-flash','gemini-2.5-flash','gemini-2.5-flash-lite'])];
+  }catch(e){if(e.message==='key'||e.message==='stop')throw e}
+  list=[...new Set([...list,'gemini-2.5-flash','gemini-2.5-flash-lite'])];
   store.set('cc-models',list);return list;
 }
-async function askGemini(prompt){
-  const list=await models();let last=null;
-  for(const m of list){
-    const r=await fetch(API+'models/'+encodeURIComponent(m)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':getKey()},
-      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:1}})});
-    if(r.ok){const j=await r.json();const t=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');if(t)return t;last={status:0};continue}
-    last={status:r.status};
-    if(r.status===400||r.status===401||r.status===403)break;
-    if(r.status===404)store.set('cc-models',list.filter(x=>x!==m));
+function ordered(list){const ok=store.get('cc-okmodel','');return ok&&list.includes(ok)?[ok,...list.filter(x=>x!==ok)]:list}
+async function askGemini(prompt,onTry){
+  const list=ordered(await models());let last=null;const log=[];
+  for(const m of list.slice(0,4)){
+    if(onTry)onTry(m);
+    const t0=Date.now();
+    try{
+      const r=await fetchT(API+'models/'+encodeURIComponent(m)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':getKey()},
+        body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:1}})},90000);
+      const secs=Math.round((Date.now()-t0)/1000);
+      if(r.ok){
+        const j=await r.json();const c=j.candidates&&j.candidates[0];
+        const t=((c&&c.content&&c.content.parts)||[]).map(p=>p.text||'').join('');
+        if(t){store.set('cc-okmodel',m);return t}
+        const why=(c&&c.finishReason)||(j.promptFeedback&&j.promptFeedback.blockReason)||'risposta vuota';
+        log.push(`${m}: ${why} (${secs} s)`);last={status:0};continue;
+      }
+      const msg=await gErr(r);log.push(`${m}: errore ${r.status} ${msg.slice(0,120)} (${secs} s)`);last={status:r.status,detail:msg};
+      if(keyBad(r.status,msg))break;
+      if(r.status===404)store.set('cc-models',list.filter(x=>x!==m));
+    }catch(e){
+      if(e.kind==='stop')throw e;
+      log.push(`${m}: ${e.kind==='timeout'?'nessuna risposta in 90 s':'connessione non riuscita'}`);last={status:e.kind==='timeout'?'timeout':'rete'};
+    }
   }
-  const e=new Error('gemini');e.status=last&&last.status;throw e;
+  const e=new Error('gemini');e.status=last&&last.status;e.detail=(last&&last.detail)||'';e.log=log;throw e;
+}
+async function diagnose(){
+  const out=$('#diag');out.textContent='Controllo in corso…';
+  if(!getKey()){out.textContent='Nessuna chiave salvata.';return}
+  const lines=[];ctl=new AbortController();
+  try{
+    store.set('cc-models',null);
+    const t0=Date.now();const list=await models();
+    lines.push(`Chiave valida. Modelli disponibili: ${list.slice(0,4).join(', ')} (${Math.round((Date.now()-t0)/1000)} s)`);
+    out.textContent=lines.join('\n')+'\nProvo una risposta breve…';
+    const t1=Date.now();
+    const txt=await askGemini('Rispondi solo con questo JSON: {"ok":true}',m=>{out.textContent=lines.join('\n')+`\nProvo ${m}…`});
+    lines.push(`Risposta ricevuta da ${store.get('cc-okmodel','?')} in ${Math.round((Date.now()-t1)/1000)} s: ${txt.slice(0,40)}`);
+    lines.push('Tutto funziona.');
+  }catch(e){
+    if(e.message==='key')lines.push('La chiave non è valida o non è abilitata: '+(e.detail||''));
+    else{lines.push('Problema: '+explain(e));if(e.log)lines.push(...e.log)}
+  }finally{ctl=null}
+  out.textContent=lines.join('\n');
+}
+function explain(e){
+  const s=e&&e.status;
+  if(e&&e.kind==='stop')return 'richiesta annullata.';
+  if(e&&e.message==='key'||keyBad(s,e&&e.detail))return 'la chiave Gemini non funziona. Controlla di averla copiata tutta in “Collegamento AI”.';
+  if(s===429)return 'hai superato il limite gratuito di Google per ora: aspetta qualche minuto (a volte fino a domani) e riprova.';
+  if(s==='timeout')return 'Google non ha risposto in tempo. Riprova: spesso alla seconda volta va.';
+  if(s==='rete')return 'il telefono non riesce a raggiungere Google. Controlla la connessione internet.';
+  if(s===500||s===503)return 'il servizio di Google è momentaneamente occupato: riprova tra poco.';
+  if(e&&e.message==='json')return 'la risposta dell\'AI era incompleta. Riprova.';
+  if(e&&e.message==='vuoto')return 'l\'AI non ha trovato ricette con questi vincoli. Prova ad ammettere qualche ingrediente da comprare o ad alzare le calorie.';
+  return 'non sono riuscito a creare le ricette. Riprova tra poco.';
 }
 
 let shown=[],recs=[];
@@ -536,27 +596,31 @@ async function crea(more){
   if(!badge()){st.textContent='Prima collega l\'AI: bastano due minuti, segui i passaggi qui sopra.';$('#key').focus();return}
   if(!more){shown=[];recs=[];out.innerHTML=''}
   busy=true;['#crea','#altre'].forEach(s=>$(s).disabled=true);$('#crea').textContent='Sto cucinando le idee…';
-  st.textContent=`Sto inventando 3 ricette da circa ${kc.value} kcal…`;
   out.insertAdjacentHTML('beforeend','<div class="skel"></div><div class="skel"></div><div class="skel"></div>');
+  ctl=new AbortController();const t0=Date.now();let cur='';
+  const tick=()=>{st.textContent=`Sto inventando 3 ricette da circa ${kc.value} kcal… ${Math.round((Date.now()-t0)/1000)} s${cur?` · ${cur}`:''}`};
+  tick();const iv=setInterval(tick,1000);$('#stop').hidden=false;
   try{
-    const text=getKey()?await askGemini(prompt()):(await claudeSample(prompt(),{cache:false})).text;
-    const rs=(parseJSON(text||'').ricette||[]).filter(r=>r&&r.nome).map(r=>({...r,id:uid(),target:+kc.value}));
+    const text=getKey()?await askGemini(prompt(),m=>{cur=m;tick()}):(await claudeSample(prompt(),{cache:false,signal:ctl.signal})).text;
+    let data;try{data=parseJSON(text||'')}catch(x){const e=new Error('json');throw e}
+    const rs=(data.ricette||[]).filter(r=>r&&r.nome).map(r=>({...r,id:uid(),target:+kc.value}));
     if(!rs.length)throw new Error('vuoto');
     out.querySelectorAll('.skel').forEach(s=>s.remove());
     recs.push(...rs);shown.push(...rs.map(r=>r.nome));
     out.insertAdjacentHTML('beforeend',rs.map(r=>card(r,'new')).join(''));
-    st.textContent=`${recs.length} ricette per 1 persona, circa ${kc.value} kcal ciascuna. Salva quelle che ti piacciono.`;
+    st.textContent=`${recs.length} ricette per 1 persona, circa ${kc.value} kcal ciascuna (in ${Math.round((Date.now()-t0)/1000)} s). Salva quelle che ti piacciono.`;
     $('#more').hidden=false;
   }catch(e){
     out.querySelectorAll('.skel').forEach(s=>s.remove());
     st.textContent=recs.length?`${recs.length} ricette per 1 persona.`:'';
-    const s=e&&e.status;
-    const msg=(s===400||s===401||s===403)?'La chiave Gemini non funziona. Controlla di averla copiata tutta in “Collegamento AI”.':s===429?'Hai fatto molte richieste ravvicinate e Google ti ha messo in pausa: aspetta un minuto e riprova.':(s===503||s===500)?'Il servizio di Google è momentaneamente occupato: riprova tra poco.':e&&e.code==='not_granted'?'Serve il permesso per chiedere a Claude: riprova e accetta.':'Non sono riuscito a creare le ricette. Controlla la connessione e riprova.';
-    eb.innerHTML=`<div class="err">${esc(msg)}</div>`;
-    if(s===400||s===401||s===403)$('#set').open=true;
-  }finally{busy=false;['#crea','#altre'].forEach(s=>$(s).disabled=false);$('#crea').textContent='Crea ricette'}
+    const msg=explain(e);
+    eb.innerHTML=`<div class="err">${esc(msg.charAt(0).toUpperCase()+msg.slice(1))}${e&&e.log&&e.log.length?`<details style="margin-top:6px;font-size:13px"><summary>Dettagli tecnici</summary>${e.log.map(l=>`<div>${esc(l)}</div>`).join('')}</details>`:''}</div>`;
+    if(e&&(e.message==='key'||keyBad(e.status,e.detail)))$('#set').open=true;
+  }finally{clearInterval(iv);ctl=null;$('#stop').hidden=true;busy=false;['#crea','#altre'].forEach(s=>$(s).disabled=false);$('#crea').textContent='Crea ricette'}
 }
 $('#crea').addEventListener('click',()=>crea(false));
+$('#stop').addEventListener('click',()=>{if(ctl)ctl.abort()});
+$('#diagbtn').addEventListener('click',diagnose);
 $('#altre').addEventListener('click',()=>crea(true));
 
 renderMag();saveSaved();route();
