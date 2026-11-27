@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cosa cucino?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0b0b0c);--ink:light-dark(#111111,#f5f2ee);--mute:light-dark(#6b6661,#a8a29c);
+--soft:light-dark(#faf7f3,#151416);--line:light-dark(#ece6df,#2a272b);--card:light-dark(#ffffff,#111012);
+--red:#e3170a;--ora:#f0a21a;--ora2:#e8b52a;--yel:#ffd900;--pink:#f4b6c6;
+--redsoft:light-dark(#fde8e6,#2e0f0c);--pinksoft:light-dark(#fdeef2,#2d1a20);--yelsoft:light-dark(#fff8d1,#2a2508);--orasoft:light-dark(#fef2dc,#2c1f08);
+--serif:"Cormorant Garamond","Cormorant",Georgia,serif;--sans:Manrope,system-ui,sans-serif}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;text-wrap:balance;line-height:1.05}
+.wrap{max-width:960px;margin:0 auto}
+a{color:var(--red)}
+
+/* testata */
+.top{background:#0a0a0a;color:#fff;padding:clamp(22px,4vw,44px) max(5vw,16px) 0;position:relative;overflow:hidden}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
+.brand{font-family:var(--serif);font-weight:600;font-size:clamp(34px,6.5vw,58px);letter-spacing:.14em;text-transform:uppercase;line-height:1}
+.top p{margin:12px 0 0;color:#cfc9c2;max-width:46ch;font-size:15px}
+.dots{width:clamp(110px,20vw,190px);height:auto;display:block}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-top:clamp(20px,3vw,32px);padding-bottom:14px}
+.tabs a{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:10px 16px 10px 12px;border-radius:999px;min-height:46px;display:flex;align-items:center;gap:10px;border:1px solid #2a2a2a;transition:background .2s,color .2s}
+.tabs a:hover{border-color:#555}
+.tabs a i{width:14px;height:14px;border-radius:50%;flex:none}
+.tabs a[data-t=magazzino] i{background:var(--yel)}.tabs a[data-t=crea] i{background:var(--red)}.tabs a[data-t=salvate] i{background:var(--pink)}
+.tabs a[aria-current=page]{background:#fff;color:#0a0a0a;border-color:#fff}
+.tabs a:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+.cnt{font-size:12px;background:#2a2a2a;color:#fff;border-radius:99px;padding:1px 8px;font-weight:700}
+.tabs a[aria-current=page] .cnt{background:#0a0a0a;color:#fff}
+
+/* sezioni */
+.band{padding:clamp(26px,4vw,48px) max(5vw,16px) 40px}
+section[hidden]{display:none}
+.head{display:flex;gap:16px;align-items:center;margin-bottom:22px}
+.head .disc{width:54px;height:54px;border-radius:50%;flex:none;box-shadow:inset -6px -8px 14px rgba(0,0,0,.12)}
+.head h2{font-size:clamp(26px,4.4vw,36px);letter-spacing:.12em;text-transform:uppercase}
+.head p{margin:4px 0 0;color:var(--mute);font-size:15px}
+.board{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(16px,3vw,28px);box-shadow:0 1px 0 var(--line),0 20px 40px -32px rgba(0,0,0,.35)}
+label.l{display:block;font-weight:700;margin-bottom:10px;font-size:14px;letter-spacing:.02em}
+input[type=text],input[type=password],input[type=number],input[type=search],select{font:inherit;font-size:16px;padding:11px 14px;border-radius:14px;border:1px solid var(--line);background:var(--soft);color:var(--ink);min-height:48px;width:100%;transition:border-color .15s,background .15s}
+input:hover,select:hover{border-color:light-dark(#d6cec5,#3a363b)}
+input:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;min-height:44px;padding:10px 20px;font-weight:700;transition:transform .12s,background .15s,opacity .15s}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.55;cursor:wait}
+.btn-tom{background:var(--red);color:#fff}
+.btn-tom:hover{background:light-dark(#c91307,#ff3a2a)}
+.btn-bas{background:var(--pink);color:#3a0f1c}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.sm{min-height:38px;padding:6px 14px;font-size:14px}
+.addrow{display:grid;grid-template-columns:minmax(0,1fr) 110px 96px auto;gap:8px}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sugg button{min-height:34px;padding:5px 12px;font-weight:600;font-size:13px;background:var(--soft);border:1px solid var(--line);color:var(--mute)}
+.sugg button:hover{color:var(--ink);background:var(--yelsoft);border-color:var(--yel)}
+
+/* magazzino */
+.inv{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden}
+.item{display:grid;grid-template-columns:12px minmax(0,1fr) 100px 88px 44px;gap:10px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line)}
+.item::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--yel)}
+.item:last-child{border-bottom:0}
+.item .nm{font-weight:600;overflow-wrap:anywhere;text-transform:capitalize}
+.item input,.item select{min-height:42px;padding:8px 10px;background:transparent}
+.item .del{width:44px;padding:0;background:transparent;color:var(--mute);font-size:20px;border-radius:50%}
+.item .del:hover{background:var(--redsoft);color:var(--red)}
+.item.low::before{background:var(--red)}
+.item.low .nm::after{content:"quasi finito";font-size:11px;font-weight:700;color:var(--red);background:var(--redsoft);border-radius:99px;padding:2px 8px;margin-left:8px;white-space:nowrap;text-transform:none}
+.emptybox{padding:32px 18px;text-align:center;color:var(--mute)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.tools input{flex:1 1 220px;width:auto}
+
+/* calorie */
+.kcal{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(16px,3vw,28px);align-items:center;background:var(--soft);border-radius:20px;padding:clamp(14px,2.5vw,22px)}
+.plate{width:clamp(108px,18vw,140px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--ora2),var(--ora) 60%,#d98a0c);display:grid;place-items:center;text-align:center;color:#1a1000;box-shadow:inset -8px -10px 18px rgba(0,0,0,.12),0 14px 26px -16px rgba(200,110,0,.7)}
+.plate b{display:block;font-family:var(--serif);font-size:clamp(34px,6vw,46px);line-height:.9;font-weight:700}
+.plate small{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.kcal label{font-weight:700;font-size:14px}
+input[type=range]{width:100%;margin:10px 0 2px;accent-color:var(--ora);height:28px}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--mute)}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.presets button{min-height:34px;padding:5px 12px;font-size:13px;font-weight:600;background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.presets button[aria-pressed=true]{background:var(--ora);border-color:var(--ora);color:#1a1000}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px;margin-top:18px}
+.opts label,.extra label{font-size:13px;font-weight:700;display:grid;gap:6px;color:var(--mute)}
+.extra{margin-top:12px}
+.uses{margin-top:16px;font-size:14px;color:var(--mute);padding:10px 14px;border-radius:14px;background:var(--yelsoft)}
+.uses a{font-weight:700}
+.go{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.go .btn-tom{font-size:16px;padding:14px 28px;letter-spacing:.02em;box-shadow:0 12px 24px -14px rgba(227,23,10,.8)}
+.one{font-size:13px;color:var(--mute)}
+.set{margin-top:20px;border-top:1px solid var(--line);padding-top:14px}
+.set summary{cursor:pointer;font-weight:700;min-height:32px;font-size:15px}
+.set p,.set ol{font-size:14px;color:var(--mute);margin:6px 0 10px}
+.set ol{padding-left:20px}
+.set .row{display:flex;gap:8px;flex-wrap:wrap}
+.set .row input{flex:1 1 220px;width:auto}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;margin-left:8px;vertical-align:1px}
+.badge::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.badge.ok{background:var(--yelsoft);color:light-dark(#6b5600,#ffd900)}.badge.no{background:var(--redsoft);color:var(--red)}
+.status{color:var(--mute);margin:24px 0 14px;font-size:15px}
+.err{background:var(--redsoft);color:var(--ink);padding:12px 16px;border-radius:14px;margin-bottom:16px;border-left:4px solid var(--red)}
+
+/* schede ricetta */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:18px}
+.rec{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 40px -34px rgba(0,0,0,.4)}
+.rtop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:start}
+.rec h3{font-size:26px;line-height:1.05}
+.kdisc{width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--ora2),var(--ora) 60%,#d98a0c);display:grid;place-items:center;text-align:center;color:#1a1000;flex:none;box-shadow:inset -5px -7px 12px rgba(0,0,0,.12)}
+.kdisc b{display:block;font-family:var(--serif);font-size:24px;line-height:.9;font-weight:700}
+.kdisc small{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:8px}
+.meta span{background:var(--soft);color:var(--mute);border:1px solid var(--line);padding:2px 10px;border-radius:999px;font-weight:700;white-space:nowrap}
+.rec p{margin:0;color:var(--mute);font-size:15px}
+.goal{font-size:13px;color:var(--mute);display:grid;gap:6px}
+.bar{height:6px;border-radius:99px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--yel),var(--ora),var(--red));border-radius:99px}
+.macro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;font-size:12px;color:var(--mute)}
+.macro div{display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:14px;padding:8px 10px}
+.macro div::before{content:"";width:10px;height:10px;border-radius:50%;flex:none}
+.macro div:nth-child(1)::before{background:var(--red)}.macro div:nth-child(2)::before{background:var(--ora)}.macro div:nth-child(3)::before{background:var(--pink)}
+.macro b{display:block;font-size:15px;color:var(--ink);white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;white-space:nowrap;padding-left:10px;color:var(--mute);font-size:13px}
+td.g{text-align:right;white-space:nowrap;padding-left:10px;font-weight:700}
+tr.miss td:first-child{color:var(--red);font-weight:600}
+tr.miss td:first-child::after{content:" · da comprare";font-size:12px;font-weight:500}
+.legend{display:none}
+details.steps{border-top:1px solid var(--line);padding-top:12px;margin-top:auto}
+details.steps summary{cursor:pointer;font-weight:700;min-height:32px;font-size:15px}
+details.steps ol{margin:10px 0 0;padding-left:22px;font-size:15px}
+details.steps li{margin-bottom:8px}
+details.steps li::marker{color:var(--red);font-weight:700}
+.tip{font-size:14px;background:var(--pinksoft);padding:10px 14px;border-radius:14px;margin-top:8px}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.saved-on{background:var(--pinksoft);color:light-dark(#9c2f4e,#f4b6c6);border:1px solid var(--pink)}
+.date{font-size:13px;color:var(--mute)}
+.more{margin-top:26px;display:flex;justify-content:center}
+.more[hidden]{display:none}
+.skel{height:480px;border-radius:24px;background:linear-gradient(90deg,var(--soft),var(--line),var(--soft));background-size:200% 100%;animation:sh 1.4s infinite linear}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.skel{animation:none}*{transition:none!important}}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#0a0a0a;color:#fff;padding:12px 14px 12px 18px;border-radius:999px;display:flex;gap:14px;align-items:center;box-shadow:0 14px 34px rgba(0,0,0,.3);max-width:calc(100vw - 24px);z-index:9;font-size:14px}
+.toast[hidden]{display:none}
+.toast button{background:var(--yel);color:#111;min-height:34px;padding:4px 14px;flex:none}
+footer{color:var(--mute);font-size:13px;padding:24px max(5vw,16px) 40px;border-top:1px solid var(--line)}
+@media(max-width:600px){
+  .hero{grid-template-columns:minmax(0,1fr) 92px}
+  .dots{width:92px}
+  .addrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .addrow #nome{grid-column:1/-1}.addrow button{grid-column:1/-1}
+  .item{grid-template-columns:10px minmax(0,1fr) 72px 66px 38px;gap:6px;padding:8px 10px}
+  .item::before{width:10px;height:10px}
+  .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tabs a{padding:8px 10px;font-size:14px;justify-content:center;text-transform:capitalize;gap:7px}
+  .tabs .x{display:none}
+  .kcal{grid-template-columns:1fr;justify-items:center}
+  .kcal>div:last-child{width:100%}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="hero">
+    <div>
+      <h1 class="brand">Cosa cucino</h1>
+      <p>Il tuo magazzino, ricette create su misura per te e le preferite da rifare.</p>
+    </div>
+    <svg class="dots" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <radialGradient id="gO" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e8b52a"/><stop offset=".6" stop-color="#f0a21a"/><stop offset="1" stop-color="#d98a0c"/></radialGradient>
+        <radialGradient id="gR" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ff2a12"/><stop offset=".7" stop-color="#e3170a"/><stop offset="1" stop-color="#b80f05"/></radialGradient>
+        <radialGradient id="gY" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffe94d"/><stop offset=".7" stop-color="#ffd900"/><stop offset="1" stop-color="#f2c400"/></radialGradient>
+        <radialGradient id="gP" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fbd3de"/><stop offset=".7" stop-color="#f4b6c6"/><stop offset="1" stop-color="#e79fb3"/></radialGradient>
+      </defs>
+      <circle cx="58" cy="58" r="46" fill="url(#gO)"/>
+      <circle cx="142" cy="58" r="46" fill="url(#gR)"/>
+      <circle cx="58" cy="142" r="46" fill="url(#gY)"/>
+      <circle cx="142" cy="142" r="46" fill="url(#gP)"/>
+    </svg>
+  </div>
+  <nav class="tabs" aria-label="Sezioni">
+    <a href="#magazzino" data-t="magazzino"><i></i><span class="x">Il mio </span>magazzino <span class="cnt" id="c-mag">0</span></a>
+    <a href="#crea" data-t="crea"><i></i>Crea<span class="x"> ricette</span></a>
+    <a href="#salvate" data-t="salvate"><i></i><span class="x">Ricette </span>salvate <span class="cnt" id="c-sav">0</span></a>
+  </nav>
+</div></header>
+
+<main class="band"><div class="wrap">
+
+<!-- 1. MAGAZZINO -->
+<section id="v-magazzino" aria-labelledby="h-mag">
+  <div class="head"><span class="disc" style="background:var(--yel)"></span><div><h2 id="h-mag">Il mio magazzino</h2><p>Cosa hai in frigo e in dispensa, con le quantità.</p></div></div>
+  <div class="board">
+    <form id="fadd" autocomplete="off">
+      <label class="l" for="nome">Aggiungi un ingrediente</label>
+      <div class="addrow">
+        <input id="nome" type="text" placeholder="es. petto di pollo" required>
+        <input id="qta" type="number" inputmode="decimal" min="0" step="any" placeholder="Quantità" aria-label="Quantità">
+        <select id="unita" aria-label="Unità"><option>g</option><option>kg</option><option>ml</option><option>l</option><option>pz</option></select>
+        <button class="btn-tom" type="submit">Aggiungi</button>
+      </div>
+    </form>
+    <div class="sugg" id="sugg" aria-label="Aggiunte rapide"></div>
+  </div>
+  <div class="tools">
+    <input id="cerca-mag" type="search" placeholder="Cerca nel magazzino" aria-label="Cerca nel magazzino">
+    <button type="button" class="btn-ghost sm" id="svuota-mag">Svuota magazzino</button>
+  </div>
+  <div class="inv" id="inv"></div>
+</section>
+
+<!-- 2. CREA -->
+<section id="v-crea" aria-labelledby="h-crea" hidden>
+  <div class="head"><span class="disc" style="background:var(--red)"></span><div><h2 id="h-crea">Crea ricette</h2><p>Ricette nuove ogni volta, con quello che hai, per 1 persona.</p></div></div>
+  <div class="board">
+    <div class="kcal">
+      <div class="plate" aria-hidden="true"><div><b id="kcalv">600</b><small>kcal</small></div></div>
+      <div>
+        <label for="kcal">Calorie per questo pasto</label>
+        <input type="range" id="kcal" min="150" max="1500" step="25" value="600">
+        <div class="ticks"><span>150</span><span>1500</span></div>
+        <div class="presets" id="presets">
+          <button type="button" data-k="250">Spuntino 250</button><button type="button" data-k="400">Leggero 400</button><button type="button" data-k="600">Normale 600</button><button type="button" data-k="800">Abbondante 800</button><button type="button" data-k="1000">Post allenamento 1000</button>
+        </div>
+      </div>
+    </div>
+    <div class="opts">
+      <label>Pasto<select id="pasto"><option value="qualsiasi">Qualsiasi</option><option>colazione</option><option>pranzo</option><option selected>cena</option><option>spuntino</option><option>dolce</option></select></label>
+      <label>Tempo<select id="tempo"><option value="qualsiasi">Non importa</option><option value="15">Max 15 min</option><option value="30" selected>Max 30 min</option><option value="60">Max 1 ora</option></select></label>
+      <label>Esigenze<select id="dieta"><option>nessuna</option><option>vegetariana</option><option>vegana</option><option>senza glutine</option><option>senza lattosio</option><option>ricca di proteine</option><option>pochi carboidrati</option></select></label>
+      <label>Da comprare<select id="manca"><option value="0">Niente, solo il magazzino</option><option value="1">Al massimo 1 ingrediente</option><option value="2" selected>Al massimo 2 ingredienti</option><option value="3">Al massimo 3 ingredienti</option></select></label>
+      <label>Stile<select id="stile"><option>qualsiasi</option><option>cucina italiana</option><option>internazionale</option><option>comfort food</option><option>fresco e veloce</option></select></label>
+    </div>
+    <div class="extra"><label>Vuoi qualcosa in particolare? (facoltativo)<input id="desiderio" type="text" placeholder="es. qualcosa di caldo, usa le zucchine, niente forno…"></label></div>
+    <div class="uses" id="uses"></div>
+    <div class="go">
+      <button class="btn-tom" id="crea" type="button">Crea ricette</button>
+      <span class="one">Dosi sempre per 1 persona</span>
+    </div>
+    <details class="set" id="set">
+      <summary>Collegamento AI <span class="badge no" id="badge">da impostare</span></summary>
+      <p>Le ricette le scrive Google Gemini. Serve una chiave gratuita, da fare una volta sola:</p>
+      <ol>
+        <li>Vai su <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> e accedi con il tuo account Google.</li>
+        <li>Premi “Create API key” e copia la chiave.</li>
+        <li>Incollala qui sotto e premi Salva.</li>
+      </ol>
+      <div class="row"><input id="key" type="password" placeholder="Incolla la chiave Gemini" aria-label="Chiave API Gemini"><button type="button" class="btn-ghost" id="savekey">Salva</button></div>
+      <p id="keymsg" style="margin:6px 0 0" aria-live="polite"></p>
+    </details>
+  </div>
+  <p class="status" id="status" aria-live="polite"></p>
+  <div id="err"></div>
+  <div class="grid" id="out"></div>
+  <div class="more" id="more" hidden><button class="btn-ghost" id="altre" type="button">Altre 3 ricette diverse</button></div>
+</section>
+
+<!-- 3. SALVATE -->
+<section id="v-salvate" aria-labelledby="h-sav" hidden>
+  <div class="head"><span class="disc" style="background:var(--pink)"></span><div><h2 id="h-sav">Ricette salvate</h2><p>Le ricette che ti sono piaciute, sempre a portata di mano.</p></div></div>
+  <div class="tools" style="margin-top:0;margin-bottom:16px"><input id="cerca-sav" type="search" placeholder="Cerca una ricetta o un ingrediente" aria-label="Cerca nelle ricette salvate"></div>
+  <div class="grid" id="saved"></div>
+</section>
+
+</div></main>
+<footer><div class="wrap">Magazzino e ricette salvate restano su questo dispositivo. Calorie e valori sono stime dell'AI: pesa gli ingredienti per restare nel tuo obiettivo e controlla sempre allergeni e cotture.</div></footer>
+<div class="toast" id="toast" role="status" hidden><span id="toastmsg"></span><button type="button" id="undo">Annulla</button></div>
+
+<script>
+{
+/* Se l'app è solo tua, puoi scrivere qui la tua chiave Gemini tra le virgolette:
+   così non dovrai inserirla nell'app. Attenzione: chi vede il codice può leggerla. */
+const CHIAVE_PREDEFINITA="";
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const num=v=>{const n=parseFloat(String(v??'').replace(',','.'));return isFinite(n)?n:0};
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
+const fmt=n=>{const r=Math.round(n*10)/10;return String(r).replace('.',',')};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+/* ---------- stato ---------- */
+let mag=store.get('cc-mag',null);
+if(!Array.isArray(mag))mag=[{id:uid(),n:'uova',q:6,u:'pz'},{id:uid(),n:'zucchine',q:400,u:'g'},{id:uid(),n:'parmigiano',q:150,u:'g'},{id:uid(),n:'pasta',q:500,u:'g'},{id:uid(),n:'latte',q:1,u:'l'}];
+let saved=store.get('cc-saved',[]);if(!Array.isArray(saved))saved=[];
+const saveMag=()=>{store.set('cc-mag',mag);$('#c-mag').textContent=mag.length;usesLine()};
+const saveSaved=()=>{store.set('cc-saved',saved);$('#c-sav').textContent=saved.length};
+
+/* ---------- schede ---------- */
+const VIEWS=['magazzino','crea','salvate'];
+function route(){
+  const h=location.hash.slice(1),v=VIEWS.includes(h)?h:'magazzino';
+  VIEWS.forEach(x=>{$('#v-'+x).hidden=x!==v;const a=document.querySelector(`.tabs a[data-t="${x}"]`);if(x===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  if(v==='salvate')renderSaved();
+  if(v==='crea')usesLine();
+}
+addEventListener('hashchange',route);
+
+/* ---------- magazzino ---------- */
+const QUICK=[['uova',6,'pz'],['pasta',500,'g'],['riso',500,'g'],['pomodori',500,'g'],['cipolla',2,'pz'],['aglio',1,'pz'],['patate',1,'kg'],['petto di pollo',400,'g'],['tonno',2,'pz'],['mozzarella',125,'g'],['yogurt greco',500,'g'],['latte',1,'l'],['avena',500,'g'],['ceci',400,'g'],['pane',300,'g'],['limone',2,'pz']];
+function renderMag(){
+  const q=norm($('#cerca-mag').value);
+  const list=mag.filter(x=>!q||norm(x.n).includes(q));
+  $('#inv').innerHTML=mag.length?(list.length?list.map(x=>{
+    const low=(x.u==='pz'&&x.q<=1)||((x.u==='g'||x.u==='ml')&&x.q<=50)||((x.u==='kg'||x.u==='l')&&x.q<=0.05);
+    return `<div class="item${low?' low':''}" data-id="${esc(x.id)}">
+      <span class="nm">${esc(x.n)}</span>
+      <input type="number" inputmode="decimal" min="0" step="any" value="${esc(x.q)}" aria-label="Quantità di ${esc(x.n)}" data-f="q">
+      <select aria-label="Unità di ${esc(x.n)}" data-f="u">${['g','kg','ml','l','pz'].map(u=>`<option${u===x.u?' selected':''}>${u}</option>`).join('')}</select>
+      <button type="button" class="del" aria-label="Togli ${esc(x.n)}">×</button>
+    </div>`}).join(''):'<div class="emptybox">Nessun ingrediente con questo nome.</div>'):'<div class="emptybox">Il magazzino è vuoto. Aggiungi qui sopra quello che hai in casa.</div>';
+  const have=new Set(mag.map(x=>norm(x.n)));
+  $('#sugg').innerHTML=QUICK.filter(([n])=>!have.has(n)).slice(0,10).map(([n,q,u])=>`<button type="button" data-n="${esc(n)}" data-q="${q}" data-u="${u}">+ ${esc(n)} ${esc(fmt(q))} ${esc(u)}</button>`).join('');
+  saveMag();
+}
+function addItem(n,q,u){
+  n=n.trim().toLowerCase();if(!n)return;
+  const ex=mag.find(x=>norm(x.n)===norm(n));
+  if(ex){
+    const b=conv(q,u,ex.u);
+    if(b!=null)ex.q=Math.round((num(ex.q)+b)*100)/100;else{ex.q=q;ex.u=u}
+  }else mag.unshift({id:uid(),n,q,u});
+  renderMag();
+}
+$('#fadd').addEventListener('submit',e=>{
+  e.preventDefault();
+  const names=$('#nome').value.split(/[,;]/).map(s=>s.trim()).filter(Boolean);
+  const q=num($('#qta').value)||( $('#unita').value==='pz'?1:0),u=$('#unita').value;
+  names.forEach(n=>addItem(n,q,u));
+  $('#nome').value='';$('#qta').value='';$('#nome').focus();
+});
+$('#sugg').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(b)addItem(b.dataset.n,num(b.dataset.q),b.dataset.u)});
+$('#inv').addEventListener('change',e=>{
+  const row=e.target.closest('.item');if(!row)return;const it=mag.find(x=>x.id===row.dataset.id);if(!it)return;
+  if(e.target.dataset.f==='q')it.q=Math.max(0,num(e.target.value));
+  if(e.target.dataset.f==='u')it.u=e.target.value;
+  renderMag();
+});
+$('#inv').addEventListener('click',e=>{
+  const b=e.target.closest('.del');if(!b)return;const id=b.closest('.item').dataset.id;
+  const prev=JSON.parse(JSON.stringify(mag));const it=mag.find(x=>x.id===id);
+  mag=mag.filter(x=>x.id!==id);renderMag();toast(`Tolto ${it?it.n:''}`,()=>{mag=prev;renderMag()});
+});
+$('#cerca-mag').addEventListener('input',renderMag);
+$('#svuota-mag').addEventListener('click',()=>{if(!mag.length)return;const prev=mag;mag=[];renderMag();toast('Magazzino svuotato',()=>{mag=prev;renderMag()})});
+
+/* unità */
+const BASE={g:['g',1],kg:['g',1000],ml:['ml',1],l:['ml',1000],pz:['pz',1]};
+function conv(q,from,to){const a=BASE[from],b=BASE[to];if(!a||!b)return null;
+  if(a[0]===b[0])return q*a[1]/b[1];
+  if((a[0]==='g'&&b[0]==='ml')||(a[0]==='ml'&&b[0]==='g'))return q*a[1]/b[1];
+  return null}
+
+/* ---------- toast con annulla ---------- */
+let undoFn=null,tt=null;
+function toast(msg,undo){
+  $('#toastmsg').textContent=msg;undoFn=undo||null;$('#undo').hidden=!undo;$('#toast').hidden=false;
+  clearTimeout(tt);tt=setTimeout(()=>{$('#toast').hidden=true;undoFn=null},6000);
+}
+$('#undo').addEventListener('click',()=>{if(undoFn)undoFn();undoFn=null;$('#toast').hidden=true});
+
+/* ---------- calorie e filtri ---------- */
+const kc=$('#kcal');
+function showK(){$('#kcalv').textContent=kc.value;document.querySelectorAll('#presets button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===kc.value?'true':'false'));store.set('cc-kcal',kc.value)}
+kc.value=store.get('cc-kcal','600');kc.addEventListener('input',showK);
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b){kc.value=b.dataset.k;showK()}});
+showK();
+['pasto','tempo','dieta','manca','stile'].forEach(id=>{const el=$('#'+id),v=store.get('cc-'+id,null);if(v!=null)el.value=v;el.addEventListener('change',()=>store.set('cc-'+id,el.value))});
+function usesLine(){
+  const avail=mag.filter(x=>num(x.q)>0);
+  $('#uses').innerHTML=avail.length?`Userò il tuo magazzino: ${avail.length} ingredienti (${esc(avail.slice(0,6).map(x=>x.n).join(', '))}${avail.length>6?'…':''}). <a href="#magazzino">Modifica</a>`:'Il magazzino è vuoto: <a href="#magazzino">aggiungi i tuoi ingredienti</a> prima di creare le ricette.';
+}
+
+/* ---------- motore AI ---------- */
+let claudeSample=null;
+try{if(window.claude&&window.claude.use)window.claude.use('sample').then(s=>{claudeSample=s;badge()}).catch(()=>{})}catch(e){}
+const getKey=()=>store.get('cc-key','')||CHIAVE_PREDEFINITA;
+function badge(){
+  const ok=!!(claudeSample||getKey());const b=$('#badge');
+  b.textContent=ok?(claudeSample&&!getKey()?'attivo in Claude':'attivo'):'da impostare';b.className='badge '+(ok?'ok':'no');
+  if(!ok)$('#set').open=true;return ok;
+}
+$('#key').value=store.get('cc-key','');
+$('#savekey').addEventListener('click',()=>{
+  const k=$('#key').value.trim();store.set('cc-key',k);store.set('cc-models',null);
+  $('#keymsg').textContent=k?'Chiave salvata su questo dispositivo. Ora premi “Crea ricette”.':'Chiave rimossa.';
+  if(badge()&&k)$('#set').open=false;
+});
+badge();
+
+const API='https://generativelanguage.googleapis.com/v1beta/';
+async function models(){
+  const cached=store.get('cc-models',null);if(Array.isArray(cached)&&cached.length)return cached;
+  let list=[];
+  try{
+    const r=await fetch(API+'models?pageSize=200',{headers:{'x-goog-api-key':getKey()}});
+    if(r.status===400||r.status===401||r.status===403){const e=new Error('key');e.status=r.status;throw e}
+    const j=await r.json();
+    list=(j.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
+      .map(m=>m.name.replace('models/','')).filter(n=>/^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(n))
+      .sort((a,b)=>{const la=a.endsWith('lite'),lb=b.endsWith('lite');if(la!==lb)return la?1:-1;return parseFloat(b.split('-')[1])-parseFloat(a.split('-')[1])});
+  }catch(e){if(e.message==='key')throw e}
+  list=[...new Set([...list,'gemini-3.5-flash','gemini-2.5-flash','gemini-2.5-flash-lite'])];
+  store.set('cc-models',list);return list;
+}
+async function askGemini(prompt){
+  const list=await models();let last=null;
+  for(const m of list){
+    const r=await fetch(API+'models/'+encodeURIComponent(m)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':getKey()},
+      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:1}})});
+    if(r.ok){const j=await r.json();const t=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');if(t)return t;last={status:0};continue}
+    last={status:r.status};
+    if(r.status===400||r.status===401||r.status===403)break;
+    if(r.status===404)store.set('cc-models',list.filter(x=>x!==m));
+  }
+  const e=new Error('gemini');e.status=last&&last.status;throw e;
+}
+
+let shown=[],recs=[];
+function prompt(){
+  const t=$('#tempo').value,k=kc.value,m=$('#manca').value,wish=$('#desiderio').value.trim();
+  const inv=mag.filter(x=>num(x.q)>0).map(x=>`${x.n}: ${fmt(num(x.q))} ${x.u}`).join('; ');
+  return `Sei un cuoco italiano e nutrizionista pratico. Inventa 3 ricette NUOVE e diverse tra loro, per UNA SOLA PERSONA (una porzione).
+Il mio magazzino (ingrediente: quantità disponibile): ${inv}.
+Ho sempre anche sale, pepe, olio extravergine d'oliva e acqua (l'olio va pesato e contato nelle calorie).
+Non usare mai più della quantità che ho di un ingrediente. Non serve usare tutto il magazzino.
+Obiettivo: circa ${k} kcal per la porzione intera (scarto massimo ±5%). Scegli i grammi di ogni ingrediente per arrivare a quel totale.
+Pasto: ${$('#pasto').value}. Tempo massimo: ${t==='qualsiasi'?'non importa':t+' minuti'}. Esigenze: ${$('#dieta').value}. Stile: ${$('#stile').value}.
+${wish?`Richiesta particolare: ${wish}.`:''}
+Ingredienti da comprare ammessi per ricetta: al massimo ${m}${m==='0'?' (usa SOLO il magazzino più sale, pepe, olio e acqua)':''}.
+${shown.length?`Non ripetere queste ricette già proposte e cambia tipo di piatto: ${shown.join('; ')}.`:''}
+Per ogni ingrediente indica quantità a crudo come numero "q" e unità "u" tra "g", "ml" o "pz", e le kcal di quella quantità con valori realistici. Per sale, pepe e spezie usa q 0 e u "q.b.". Usa per "nome" lo stesso nome del mio magazzino quando l'ingrediente viene da lì.
+Rispondi SOLO con JSON valido, senza testo e senza blocchi di codice:
+{"ricette":[{"nome":"","descrizione":"una frase invitante","tempo":"20 min","difficolta":"facile","ingredienti":[{"nome":"","q":0,"u":"g","kcal":0,"da_comprare":false}],"proteine_g":0,"carboidrati_g":0,"grassi_g":0,"passaggi":["passo 1"],"consiglio":"un trucco utile"}]}
+Tutto in italiano.`;
+}
+
+/* ---------- schede ricetta ---------- */
+const qtxt=x=>x.u==='q.b.'||(!num(x.q)&&!x.quantita)?'q.b.':x.quantita&&!num(x.q)?x.quantita:`${fmt(num(x.q))} ${x.u||'g'}`;
+const total=r=>Math.round((r.ingredienti||[]).reduce((a,x)=>a+num(x.kcal),0));
+const isSaved=r=>saved.some(s=>s.id===r.id);
+function card(r,mode){
+  const ing=Array.isArray(r.ingredienti)?r.ingredienti:[];
+  const sum=total(r),target=num(r.target)||+kc.value,pct=Math.min(100,Math.round(sum/target*100));
+  const sv=isSaved(r);
+  return `<article class="rec" data-id="${esc(r.id)}">
+    <div class="rtop"><div><h3>${esc(r.nome)}</h3>
+    <div class="meta"><span>${esc(r.tempo)}</span><span>${esc(r.difficolta)}</span><span>1 persona</span></div></div>
+    <div class="kdisc" aria-label="${esc(sum)} chilocalorie"><div><b>${esc(sum)}</b><small>kcal</small></div></div></div>
+    ${mode==='saved'&&r.data?`<div class="date">Salvata il ${esc(new Date(r.data).toLocaleDateString('it-IT',{day:'numeric',month:'long'}))}${r.cucinata?` · cucinata ${esc(r.cucinata)} ${r.cucinata===1?'volta':'volte'}`:''}</div>`:''}
+    <p>${esc(r.descrizione)}</p>
+    <div class="goal"><span>${esc(pct)}% del tuo obiettivo di ${esc(target)} kcal</span>
+    <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div></div>
+    <div class="macro"><div><span><b>${esc(Math.round(num(r.proteine_g)))} g</b>proteine</span></div><div><span><b>${esc(Math.round(num(r.carboidrati_g)))} g</b>carboidrati</span></div><div><span><b>${esc(Math.round(num(r.grassi_g)))} g</b>grassi</span></div></div>
+    <table><tbody>${ing.map(x=>`<tr class="${x.da_comprare?'miss':''}"><td>${esc(x.nome)}</td><td class="g">${esc(qtxt(x))}</td><td class="n">${esc(Math.round(num(x.kcal)))} kcal</td></tr>`).join('')}</tbody></table>
+    ${ing.some(x=>x.da_comprare)?'<div class="legend">In rosso: da comprare</div>':''}
+    <details class="steps"><summary>Procedimento</summary>
+      <ol>${(Array.isArray(r.passaggi)?r.passaggi:[]).map(p=>`<li>${esc(p)}</li>`).join('')}</ol>
+      ${r.consiglio?`<div class="tip"><b>Consiglio:</b> ${esc(r.consiglio)}</div>`:''}
+    </details>
+    <div class="acts">
+      ${mode==='saved'?'<button type="button" class="btn-ghost sm" data-a="rimuovi">Rimuovi</button>':`<button type="button" class="sm ${sv?'saved-on':'btn-bas'}" data-a="salva" aria-pressed="${sv}">${sv?'Salvata ✓':'Mi piace, salvala'}</button>`}
+      <button type="button" class="btn-ghost sm" data-a="cucinata">L'ho cucinata</button>
+      <button type="button" class="btn-ghost sm" data-a="copia">Copia</button>
+    </div>
+  </article>`;
+}
+function asText(r){
+  const ing=(r.ingredienti||[]).map(x=>`- ${x.nome}: ${qtxt(x)} (${Math.round(num(x.kcal))} kcal)`).join('\n');
+  const st=(r.passaggi||[]).map((p,i)=>`${i+1}. ${p}`).join('\n');
+  return `${r.nome} (1 persona, circa ${total(r)} kcal)\n\nIngredienti:\n${ing}\n\nProcedimento:\n${st}${r.consiglio?'\n\nConsiglio: '+r.consiglio:''}`;
+}
+async function copy(txt,b){
+  try{await navigator.clipboard.writeText(txt);b.textContent='Copiata'}catch(err){
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');b.textContent='Copiata'}catch(e2){b.textContent='Non riuscito'}ta.remove()}
+  setTimeout(()=>b.textContent='Copia',2000);
+}
+function cooked(r){
+  const prev=JSON.parse(JSON.stringify(mag));const changed=[];
+  (r.ingredienti||[]).forEach(x=>{
+    if(x.da_comprare||!num(x.q))return;
+    const k=norm(x.nome);
+    const it=mag.find(m=>norm(m.n)===k)||mag.find(m=>{const n=norm(m.n);return n.length>2&&(k.includes(n)||n.includes(k))});
+    if(!it)return;
+    const d=conv(num(x.q),x.u||'g',it.u);if(d==null)return;
+    it.q=Math.max(0,Math.round((num(it.q)-d)*100)/100);changed.push(it.n);
+  });
+  const gone=mag.filter(m=>num(m.q)<=0).map(m=>m.n);
+  mag=mag.filter(m=>num(m.q)>0);
+  const s=saved.find(x=>x.id===r.id);if(s){s.cucinata=(s.cucinata||0)+1;saveSaved()}
+  renderMag();
+  toast(changed.length?`Magazzino aggiornato: ${changed.length} ingredienti scalati${gone.length?`, finiti: ${gone.join(', ')}`:''}`:'Nessun ingrediente del magazzino da scalare',changed.length?()=>{mag=prev;renderMag()}:null);
+  if(!$('#v-salvate').hidden)renderSaved();
+}
+function onCard(e,list){
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  const id=b.closest('.rec').dataset.id,r=list().find(x=>x.id===id);if(!r)return;
+  const a=b.dataset.a;
+  if(a==='copia')copy(asText(r),b);
+  if(a==='cucinata')cooked(r);
+  if(a==='salva'){
+    if(isSaved(r)){saved=saved.filter(x=>x.id!==r.id);b.className='sm btn-bas';b.textContent='Mi piace, salvala';b.setAttribute('aria-pressed','false')}
+    else{saved.unshift({...r,data:Date.now(),target:num(r.target)||+kc.value});b.className='sm saved-on';b.textContent='Salvata ✓';b.setAttribute('aria-pressed','true');toast('Aggiunta alle ricette salvate')}
+    saveSaved();
+  }
+  if(a==='rimuovi'){const prev=saved.slice();saved=saved.filter(x=>x.id!==r.id);saveSaved();renderSaved();toast('Ricetta rimossa',()=>{saved=prev;saveSaved();renderSaved()})}
+}
+$('#out').addEventListener('click',e=>onCard(e,()=>recs));
+$('#saved').addEventListener('click',e=>onCard(e,()=>saved));
+function renderSaved(){
+  const q=norm($('#cerca-sav').value);
+  const list=saved.filter(r=>!q||norm(r.nome+' '+(r.ingredienti||[]).map(x=>x.nome).join(' ')).includes(q));
+  $('#saved').innerHTML=saved.length?(list.length?list.map(r=>card(r,'saved')).join(''):'<div class="emptybox">Nessuna ricetta salvata corrisponde.</div>'):'<div class="emptybox" style="grid-column:1/-1">Non hai ancora ricette salvate. In <a href="#crea" style="font-weight:600">Crea ricette</a> premi “Mi piace, salvala” su quelle che ti piacciono.</div>';
+}
+$('#cerca-sav').addEventListener('input',renderSaved);
+
+/* ---------- crea ---------- */
+const parseJSON=t=>{const s=t.indexOf('{'),e=t.lastIndexOf('}');return JSON.parse(t.slice(s,e+1))};
+let busy=false;
+async function crea(more){
+  if(busy)return;
+  const st=$('#status'),out=$('#out'),eb=$('#err');eb.innerHTML='';
+  if(!mag.some(x=>num(x.q)>0)){st.innerHTML='Il magazzino è vuoto: <a href="#magazzino" style="font-weight:600">aggiungi i tuoi ingredienti</a>.';return}
+  if(!badge()){st.textContent='Prima collega l\'AI: bastano due minuti, segui i passaggi qui sopra.';$('#key').focus();return}
+  if(!more){shown=[];recs=[];out.innerHTML=''}
+  busy=true;['#crea','#altre'].forEach(s=>$(s).disabled=true);$('#crea').textContent='Sto cucinando le idee…';
+  st.textContent=`Sto inventando 3 ricette da circa ${kc.value} kcal…`;
+  out.insertAdjacentHTML('beforeend','<div class="skel"></div><div class="skel"></div><div class="skel"></div>');
+  try{
+    const text=getKey()?await askGemini(prompt()):(await claudeSample(prompt(),{cache:false})).text;
+    const rs=(parseJSON(text||'').ricette||[]).filter(r=>r&&r.nome).map(r=>({...r,id:uid(),target:+kc.value}));
+    if(!rs.length)throw new Error('vuoto');
+    out.querySelectorAll('.skel').forEach(s=>s.remove());
+    recs.push(...rs);shown.push(...rs.map(r=>r.nome));
+    out.insertAdjacentHTML('beforeend',rs.map(r=>card(r,'new')).join(''));
+    st.textContent=`${recs.length} ricette per 1 persona, circa ${kc.value} kcal ciascuna. Salva quelle che ti piacciono.`;
+    $('#more').hidden=false;
+  }catch(e){
+    out.querySelectorAll('.skel').forEach(s=>s.remove());
+    st.textContent=recs.length?`${recs.length} ricette per 1 persona.`:'';
+    const s=e&&e.status;
+    const msg=(s===400||s===401||s===403)?'La chiave Gemini non funziona. Controlla di averla copiata tutta in “Collegamento AI”.':s===429?'Hai fatto molte richieste ravvicinate e Google ti ha messo in pausa: aspetta un minuto e riprova.':(s===503||s===500)?'Il servizio di Google è momentaneamente occupato: riprova tra poco.':e&&e.code==='not_granted'?'Serve il permesso per chiedere a Claude: riprova e accetta.':'Non sono riuscito a creare le ricette. Controlla la connessione e riprova.';
+    eb.innerHTML=`<div class="err">${esc(msg)}</div>`;
+    if(s===400||s===401||s===403)$('#set').open=true;
+  }finally{busy=false;['#crea','#altre'].forEach(s=>$(s).disabled=false);$('#crea').textContent='Crea ricette'}
+}
+$('#crea').addEventListener('click',()=>crea(false));
+$('#altre').addEventListener('click',()=>crea(true));
+
+renderMag();saveSaved();route();
+}
+</script>
+</body>
+</html>
