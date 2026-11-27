@@ -142,6 +142,10 @@ details.steps ol{margin:10px 0 0;padding-left:22px;font-size:15px}
 details.steps li{margin-bottom:8px}
 details.steps li::marker{color:var(--red);font-weight:700}
 .tip{font-size:14px;background:var(--pinksoft);padding:10px 14px;border-radius:14px;margin-top:8px}
+.chk{font-size:13px;border-radius:12px;padding:8px 12px}
+.chk.ok{background:var(--yelsoft);color:light-dark(#5a4800,#ffe27a)}
+.chk.warn{background:var(--orasoft);color:light-dark(#7a4300,#ffc56b)}
+.chk.warn b{display:block;margin-bottom:2px}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
 .saved-on{background:var(--pinksoft);color:light-dark(#9c2f4e,#f4b6c6);border:1px solid var(--pink)}
 .date{font-size:13px;color:var(--mute)}
@@ -500,20 +504,73 @@ let shown=[],recs=[];
 function prompt(){
   const t=$('#tempo').value,k=kc.value,m=$('#manca').value,wish=$('#desiderio').value.trim();
   const inv=mag.filter(x=>num(x.q)>0).map(x=>`${x.n}: ${fmt(num(x.q))} ${x.u}`).join('; ');
+  const pasto=$('#pasto').value,dieta=$('#dieta').value,stile=$('#stile').value;
   return `Sei un cuoco italiano e nutrizionista pratico. Inventa 3 ricette NUOVE e diverse tra loro, per UNA SOLA PERSONA (una porzione).
-Il mio magazzino (ingrediente: quantità disponibile): ${inv}.
-Ho sempre anche sale, pepe, olio extravergine d'oliva e acqua (l'olio va pesato e contato nelle calorie).
-Non usare mai più della quantità che ho di un ingrediente. Non serve usare tutto il magazzino.
-Obiettivo: circa ${k} kcal per la porzione intera (scarto massimo ±5%). Scegli i grammi di ogni ingrediente per arrivare a quel totale.
-Pasto: ${$('#pasto').value}. Tempo massimo: ${t==='qualsiasi'?'non importa':t+' minuti'}. Esigenze: ${$('#dieta').value}. Stile: ${$('#stile').value}.
-${wish?`Richiesta particolare: ${wish}.`:''}
-Ingredienti da comprare ammessi per ricetta: al massimo ${m}${m==='0'?' (usa SOLO il magazzino più sale, pepe, olio e acqua)':''}.
-${shown.length?`Non ripetere queste ricette già proposte e cambia tipo di piatto: ${shown.join('; ')}.`:''}
+
+IL MIO MAGAZZINO (ingrediente: quantità disponibile): ${inv}.
+Ho sempre anche sale, pepe, olio extravergine d'oliva e acqua.
+
+REGOLE OBBLIGATORIE, da rispettare tutte:
+1. CALORIE: ogni ricetta deve dare in totale ${k} kcal (tra ${Math.round(k*0.95)} e ${Math.round(k*1.05)}). Scegli i grammi di ogni ingrediente per arrivarci. Conta anche l'olio.
+2. TIPO DI PIATTO: ${pasto==='qualsiasi'?'qualsiasi':pasto==='dolce'?'un DOLCE (dessert)':pasto}.
+3. TEMPO: ${t==='qualsiasi'?'nessun limite':`al massimo ${t} minuti in tutto, cottura compresa`}.
+4. ESIGENZE ALIMENTARI: ${dieta==='nessuna'?'nessuna':dieta+'. Non usare nessun ingrediente che non la rispetti, anche se è nel magazzino'}.
+5. DA COMPRARE: ${m==='0'?'NESSUN ingrediente: usa solo il magazzino più sale, pepe, olio e acqua':`al massimo ${m} ingredienti che non sono nel magazzino, segnati con "da_comprare": true`}.
+6. QUANTITÀ: non usare mai più della quantità che ho di un ingrediente. Non serve usare tutto il magazzino.
+7. STILE: ${stile}.${wish?`\n8. RICHIESTA PARTICOLARE: ${wish}.`:''}
+${shown.length?`Non ripetere queste ricette già proposte e cambia tipo di piatto: ${shown.join('; ')}.\n`:''}
+Se le regole insieme rendono impossibile una ricetta (per esempio un dolce vegano senza ingredienti adatti), proponi comunque la soluzione più vicina e spiega cosa non hai potuto rispettare nel campo "nota". Altrimenti lascia "nota" vuota.
 Procedimento in massimo 6 passaggi brevi e chiari.
 Per ogni ingrediente indica quantità a crudo come numero "q" e unità "u" tra "g", "ml" o "pz", e le kcal di quella quantità con valori realistici. Per sale, pepe e spezie usa q 0 e u "q.b.". Usa per "nome" lo stesso nome del mio magazzino quando l'ingrediente viene da lì.
 Rispondi SOLO con JSON valido, senza testo e senza blocchi di codice:
-{"ricette":[{"nome":"","descrizione":"una frase invitante","tempo":"20 min","difficolta":"facile","ingredienti":[{"nome":"","q":0,"u":"g","kcal":0,"da_comprare":false}],"proteine_g":0,"carboidrati_g":0,"grassi_g":0,"passaggi":["passo 1"],"consiglio":"un trucco utile"}]}
+{"ricette":[{"nome":"","descrizione":"una frase invitante","tempo":"20 min","difficolta":"facile","ingredienti":[{"nome":"","q":0,"u":"g","kcal":0,"da_comprare":false}],"proteine_g":0,"carboidrati_g":0,"grassi_g":0,"passaggi":["passo 1"],"consiglio":"un trucco utile","nota":""}]}
 Tutto in italiano.`;
+}
+
+/* ---------- verifica: la ricetta rispetta le impostazioni? ---------- */
+const BASICS=['sale','pepe','olio','acqua','spezie','erbe','cannella','vaniglia','noce moscata','origano','basilico','prezzemolo','rosmarino','peperoncino','aceto','lievito','bicarbonato'];
+const NOVEG=['carne','pollo','tacchino','manzo','vitello','maiale','prosciutto','speck','salame','guanciale','pancetta','salsiccia','wurstel','bresaola','tonno','salmone','pesce','merluzzo','gamber','acciugh','alici','vongol','cozz'];
+const ANIMAL=['uov','latte','burro','formaggio','parmigiano','grana','pecorino','mozzarella','ricotta','mascarpone','yogurt','panna','miele','stracchino','gelatina'];
+const GLUTEN=['pasta','pane','farina','couscous','cous cous','orzo','farro','seitan','biscott','pangrattato','crackers','grissini','piadina','pizza','savoiardi','semola'];
+const LACTO=['latte','burro','formaggio','parmigiano','grana','pecorino','mozzarella','ricotta','mascarpone','yogurt','panna','stracchino'];
+const hasAny=(n,list)=>list.some(w=>n.includes(w));
+function findMag(name){const k=norm(name);return mag.find(m=>norm(m.n)===k)||mag.find(m=>{const n=norm(m.n);return n.length>2&&(k.includes(n)||n.includes(k))})}
+function verify(r,set){
+  const warns=[];let fixed='';
+  const ing=Array.isArray(r.ingredienti)?r.ingredienti:[];
+  /* ingredienti non presenti nel magazzino: vanno comprati */
+  ing.forEach(x=>{const n=norm(x.nome);if(!x.da_comprare&&!findMag(x.nome)&&!hasAny(n,BASICS)&&num(x.q)>0)x.da_comprare=true});
+  /* calorie: se l'AI ha sbagliato di poco, adatto le dosi in proporzione */
+  const sum=ing.reduce((a,x)=>a+num(x.kcal),0),target=set.kcal;
+  if(sum>0&&Math.abs(sum-target)/target>0.06){
+    const f=target/sum;
+    if(f>=0.6&&f<=1.6){
+      ing.forEach(x=>{if(num(x.q)>0){x.q=x.u==='pz'?Math.max(0.5,Math.round(num(x.q)*f*2)/2):Math.round(num(x.q)*f)}x.kcal=Math.round(num(x.kcal)*f)});
+      ['proteine_g','carboidrati_g','grassi_g'].forEach(k=>r[k]=Math.round(num(r[k])*f));
+      fixed=`Dosi adattate da ${Math.round(sum)} a circa ${target} kcal`;
+    }else warns.push(`${Math.round(sum)} kcal invece di ${target}`);
+  }
+  /* quantità oltre il magazzino */
+  ing.forEach(x=>{if(x.da_comprare||!num(x.q))return;const it=findMag(x.nome);if(!it)return;const d=conv(num(x.q),x.u||'g',it.u);if(d!=null&&d>num(it.q)*1.001)warns.push(`${x.nome}: servono ${qtxt(x)}, ne hai ${fmt(num(it.q))} ${it.u}`)});
+  /* ingredienti da comprare */
+  const buy=ing.filter(x=>x.da_comprare).length;
+  const nomi=ing.filter(x=>x.da_comprare).map(x=>x.nome).join(', ');
+  if(buy>set.manca)warns.push(set.manca===0?`da comprare: ${nomi} (avevi scelto solo il magazzino)`:`da comprare: ${nomi} (massimo ${set.manca})`);
+  /* tempo */
+  const tm=parseInt(String(r.tempo||'').replace(/[^0-9]/g,''))||0,ore=/or[ae]/i.test(r.tempo||'');const mins=ore?tm*60:tm;
+  if(set.tempo!=='qualsiasi'&&mins>+set.tempo+5)warns.push(`richiede ${r.tempo} (limite ${set.tempo} min)`);
+  /* esigenze */
+  const names=ing.map(x=>norm(x.nome));
+  const bad=list=>names.filter(n=>hasAny(n,list)&&!/vegetal|vegan|senza lattosio|senza glutine|di riso|di mais|di soia|di avena|di mandorl|di cocco|di ceci/.test(n));
+  let viol=[];
+  if(set.dieta==='vegetariana')viol=bad(NOVEG);
+  if(set.dieta==='vegana')viol=bad([...NOVEG,...ANIMAL]);
+  if(set.dieta==='senza glutine')viol=bad(GLUTEN);
+  if(set.dieta==='senza lattosio')viol=bad(LACTO);
+  if(viol.length)warns.push(`non adatto a dieta ${set.dieta}: ${[...new Set(viol)].join(', ')}`);
+  if(r.nota)warns.push(String(r.nota));
+  r.check={warns,fixed};
+  return r;
 }
 
 /* ---------- schede ricetta ---------- */
@@ -522,7 +579,7 @@ const total=r=>Math.round((r.ingredienti||[]).reduce((a,x)=>a+num(x.kcal),0));
 const isSaved=r=>saved.some(s=>s.id===r.id);
 function card(r,mode){
   const ing=Array.isArray(r.ingredienti)?r.ingredienti:[];
-  const sum=total(r),target=num(r.target)||+kc.value,pct=Math.min(100,Math.round(sum/target*100));
+  const sum=total(r),target=num(r.target)||+kc.value,real=Math.round(sum/target*100),pct=Math.min(100,real);
   const sv=isSaved(r);
   return `<article class="rec" data-id="${esc(r.id)}">
     <div class="rtop"><div><h3>${esc(r.nome)}</h3>
@@ -530,7 +587,8 @@ function card(r,mode){
     <div class="kdisc" aria-label="${esc(sum)} chilocalorie"><div><b>${esc(sum)}</b><small>kcal</small></div></div></div>
     ${mode==='saved'&&r.data?`<div class="date">Salvata il ${esc(new Date(r.data).toLocaleDateString('it-IT',{day:'numeric',month:'long'}))}${r.cucinata?` · cucinata ${esc(r.cucinata)} ${r.cucinata===1?'volta':'volte'}`:''}</div>`:''}
     <p>${esc(r.descrizione)}</p>
-    <div class="goal"><span>${esc(pct)}% del tuo obiettivo di ${esc(target)} kcal</span>
+    ${r.check?(r.check.warns.length?`<div class="chk warn"><b>Attenzione</b>${r.check.warns.map(w=>`<div>${esc(w)}</div>`).join('')}</div>`:`<div class="chk ok">Rispetta le tue impostazioni${r.check.fixed?` · ${esc(r.check.fixed)}`:''}</div>`):''}
+    <div class="goal"><span>${esc(real)}% del tuo obiettivo di ${esc(target)} kcal</span>
     <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div></div>
     <div class="macro"><div><span><b>${esc(Math.round(num(r.proteine_g)))} g</b>proteine</span></div><div><span><b>${esc(Math.round(num(r.carboidrati_g)))} g</b>carboidrati</span></div><div><span><b>${esc(Math.round(num(r.grassi_g)))} g</b>grassi</span></div></div>
     <table><tbody>${ing.map(x=>`<tr class="${x.da_comprare?'miss':''}"><td>${esc(x.nome)}</td><td class="g">${esc(qtxt(x))}</td><td class="n">${esc(Math.round(num(x.kcal)))} kcal</td></tr>`).join('')}</tbody></table>
@@ -613,7 +671,8 @@ async function crea(more){
   try{
     const text=getKey()?await askGemini(prompt(),m=>{cur=m;tick()}):(await claudeSample(prompt(),{cache:false,signal:ctl.signal})).text;
     let data;try{data=parseJSON(text||'')}catch(x){const e=new Error('json');throw e}
-    const rs=(data.ricette||[]).filter(r=>r&&r.nome).map(r=>({...r,id:uid(),target:+kc.value}));
+    const set={kcal:+kc.value,manca:+$('#manca').value,tempo:$('#tempo').value,dieta:$('#dieta').value};
+    const rs=(data.ricette||[]).filter(r=>r&&r.nome).map(r=>verify({...r,id:uid(),target:+kc.value},set));
     if(!rs.length)throw new Error('vuoto');
     out.querySelectorAll('.skel').forEach(s=>s.remove());
     recs.push(...rs);shown.push(...rs.map(r=>r.nome));
