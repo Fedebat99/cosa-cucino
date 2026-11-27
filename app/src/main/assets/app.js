@@ -12,6 +12,7 @@ const fmt=n=>{const r=Math.round(n*10)/10;return String(r).replace('.',',')};
 const PLATE='<svg aria-hidden="true" viewBox="540 200 1500 1040"><g class="fork" fill="#FFFFFF"><rect x="597" y="334" width="124" height="256" rx="24"/><rect x="635" y="560" width="48" height="545" rx="24"/></g><g fill="#0A0A0A"><rect x="621" y="300" width="14" height="190" rx="7"/><rect x="683" y="300" width="14" height="190" rx="7"/></g><path class="knife" d="M1980 360 V1081 a24 24 0 0 1 -48 0 V765 h-19 a24 24 0 0 1 -24 -24 V405 a71 71 0 0 1 67 -71 a24 24 0 0 1 24 26 Z" fill="#FFFFFF"/><circle cx="1288" cy="719" r="477" fill="#FFFFFF"/><circle cx="1288" cy="719" r="279" fill="#E3E3E3"/><g class="orbit"><circle cx="1608" cy="356" r="119" fill="#0A0A0A"/><circle cx="1608" cy="356" r="99" fill="#F4B6C6"/></g></svg>';
 const POT='<svg aria-hidden="true" class="potsvg" viewBox="780 160 1016 1110"><path d="M966 896 H1610 A322 322 0 0 1 966 896 Z" fill="#E3170A"/><rect x="836" y="896" width="110" height="67" rx="14" fill="#E3170A"/><rect x="1630" y="896" width="110" height="67" rx="14" fill="#E3170A"/><circle class="b b1" cx="1288" cy="724" r="129" fill="#FFD900"/><circle class="b b2" cx="1288" cy="455" r="86" fill="#F0A21A"/><circle class="b b3" cx="1288" cy="263" r="54" fill="#F4B6C6"/></svg>';
 const ARTS={magazzino:'<svg viewBox="0 0 200 200" aria-hidden="true"><rect x="22" y="96" width="156" height="9" rx="4.5" fill="#FFFFFF"/><rect x="22" y="166" width="156" height="9" rx="4.5" fill="#FFFFFF"/><g class="j1"><rect x="34" y="46" width="34" height="50" rx="9" fill="#FFD900"/><rect x="38" y="38" width="26" height="10" rx="5" fill="#FFFFFF"/></g><g class="j2"><circle cx="96" cy="78" r="18" fill="#F0A21A"/></g><g class="j3"><rect x="126" y="56" width="40" height="40" rx="10" fill="#F4B6C6"/><rect x="132" y="48" width="28" height="10" rx="5" fill="#FFFFFF"/></g><g class="j4"><rect x="36" y="124" width="46" height="42" rx="10" fill="#E3170A"/><rect x="44" y="116" width="30" height="10" rx="5" fill="#FFFFFF"/></g><g class="j5"><circle cx="108" cy="151" r="15" fill="#FFD900"/><circle cx="138" cy="151" r="15" fill="#F0A21A"/></g><g class="j6"><circle cx="165" cy="155" r="10" fill="#F4B6C6"/></g></svg>',crea:'<svg aria-hidden="true" viewBox="780 160 1016 1110"><path d="M966 896 H1610 A322 322 0 0 1 966 896 Z" fill="#E3170A"/><rect x="836" y="896" width="110" height="67" rx="14" fill="#E3170A"/><rect x="1630" y="896" width="110" height="67" rx="14" fill="#E3170A"/><circle class="b b1" cx="1288" cy="724" r="129" fill="#FFD900"/><circle class="b b2" cx="1288" cy="455" r="86" fill="#F0A21A"/><circle class="b b3" cx="1288" cy="263" r="54" fill="#F4B6C6"/></svg>',salvate:'<svg aria-hidden="true" viewBox="900 340 780 760"><rect class="pg1" x="946" y="596" width="320" height="462" rx="40" fill="#FFFFFF"/><rect class="pg2" x="1310" y="596" width="321" height="462" rx="40" fill="#FFFFFF"/><path class="heart" d="M1157 704 L1010 505 A88 88 0 0 1 1157 420 A88 88 0 0 1 1304 505 Z" fill="#F4B6C6"/><circle class="d1" cx="1417" cy="520" r="44" fill="#E3170A"/><circle class="d2" cx="1524" cy="467" r="42" fill="#FFD900"/></svg>'};
+const MEAL_ICONS={colazione:'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="70" cy="30" r="18" fill="#FFD900"/><rect x="18" y="44" width="46" height="40" rx="12" fill="#FFFFFF"/><rect x="58" y="52" width="16" height="22" rx="8" fill="none" stroke="#FFFFFF" stroke-width="7"/><circle cx="41" cy="46" r="17" fill="#F0A21A"/></svg>',spuntino:'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="58" r="30" fill="#E3170A"/><path d="M52 30 C54 14 68 10 76 12 C74 24 64 30 52 30 Z" fill="#FFD900"/><rect x="47" y="20" width="6" height="16" rx="3" fill="#FFFFFF"/></svg>',antipasto:'<svg viewBox="0 0 100 100" aria-hidden="true"><rect x="10" y="58" width="80" height="16" rx="8" fill="#FFFFFF"/><circle cx="28" cy="46" r="12" fill="#E3170A"/><circle cx="50" cy="44" r="14" fill="#FFD900"/><circle cx="72" cy="46" r="12" fill="#F4B6C6"/><rect x="48" y="16" width="4" height="20" rx="2" fill="#FFFFFF"/></svg>',primo:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M12 50 H88 A38 38 0 0 1 12 50 Z" fill="#F0A21A"/><circle cx="38" cy="42" r="11" fill="#FFD900"/><circle cx="56" cy="38" r="13" fill="#FFD900"/><circle cx="70" cy="45" r="8" fill="#FFD900"/><circle cx="48" cy="26" r="7" fill="#E3170A"/></svg>',secondo:'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="52" r="38" fill="#FFFFFF"/><circle cx="44" cy="54" r="20" fill="#E3170A"/><circle cx="68" cy="40" r="8" fill="#FFD900"/><circle cx="66" cy="66" r="6" fill="#F4B6C6"/></svg>',contorno:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M14 54 H86 A36 36 0 0 1 14 54 Z" fill="#FFFFFF"/><ellipse cx="36" cy="40" rx="16" ry="9" transform="rotate(-25 36 40)" fill="#FFD900"/><ellipse cx="62" cy="38" rx="16" ry="9" transform="rotate(25 62 38)" fill="#F4B6C6"/><circle cx="50" cy="46" r="8" fill="#E3170A"/></svg>',dolce:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M18 78 L82 78 Q86 78 84 74 L56 30 Q50 22 44 30 L16 74 Q14 78 18 78 Z" fill="#F4B6C6"/><rect x="16" y="78" width="68" height="8" rx="4" fill="#FFFFFF"/><circle cx="50" cy="22" r="9" fill="#E3170A"/></svg>'};
 const TITLES={magazzino:'Il mio magazzino',crea:'Crea ricette',salvate:'Ricette salvate'};
 const emptyArt=t=>`<div class="emptyart"><div class="pl">${PLATE}</div><p>${t}</p></div>`;
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -65,7 +66,7 @@ function renderMag(){
 }
 function addItem(n,q,u){
   n=n.trim().toLowerCase();if(!n)return;
-  const ex=mag.find(x=>norm(x.n)===norm(n));
+  const ex=mag.find(x=>norm(x.n)===norm(n))||mag.find(x=>stems(x.n).join(' ')===stems(n).join(' '));
   if(ex){
     const b=conv(q,u,ex.u);
     if(b!=null)ex.q=Math.round((num(ex.q)+b)*100)/100;else{ex.q=q;ex.u=u}
@@ -115,9 +116,16 @@ function showK(){$('#kcalv').textContent=kc.value;document.querySelectorAll('#pr
 kc.value=store.get('cc-kcal','600');kc.addEventListener('input',showK);
 $('#presets').addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b){kc.value=b.dataset.k;showK()}});
 showK();
-['pasto','tempo','dieta','manca','stile'].forEach(id=>{const el=$('#'+id),v=store.get('cc-'+id,null);if(v!=null)el.value=v;el.addEventListener('change',()=>store.set('cc-'+id,el.value))});
-function syncMeals(){document.querySelectorAll('#meals button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===$('#pasto').value?'true':'false'))}
-$('#meals').addEventListener('click',e=>{const b=e.target.closest('button[data-p]');if(!b)return;const s=$('#pasto');s.value=b.dataset.p;s.dispatchEvent(new Event('change'));syncMeals()});
+['tempo','dieta','manca','stile'].forEach(id=>{const el=$('#'+id),v=store.get('cc-'+id,null);if(v!=null)el.value=v;el.addEventListener('change',()=>store.set('cc-'+id,el.value))});
+const ORDER=['colazione','spuntino','antipasto','primo','secondo','contorno','dolce'];
+let pasti=store.get('cc-pasti',null);if(!Array.isArray(pasti))pasti=['secondo','contorno'];
+pasti=ORDER.filter(x=>pasti.includes(x));
+function syncMeals(){
+  document.querySelectorAll('#meals button').forEach(b=>b.setAttribute('aria-pressed',pasti.includes(b.dataset.p)?'true':'false'));
+  $('#mealhint').textContent=!pasti.length?'Nessuna scelta: l\'AI decide il piatto':pasti.length===1?`3 ricette di tipo ${pasti[0]}`:`3 menu con: ${pasti.join(' + ')}`;
+  store.set('cc-pasti',pasti);
+}
+$('#meals').addEventListener('click',e=>{const b=e.target.closest('button[data-p]');if(!b)return;const p=b.dataset.p;pasti=pasti.includes(p)?pasti.filter(x=>x!==p):ORDER.filter(x=>x===p||pasti.includes(x));syncMeals()});
 syncMeals();
 function burst(el,cols){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -245,15 +253,16 @@ let shown=[],recs=[];
 function prompt(){
   const t=$('#tempo').value,k=kc.value,m=$('#manca').value,wish=$('#desiderio').value.trim();
   const inv=mag.filter(x=>num(x.q)>0).map(x=>`${x.n}: ${fmt(num(x.q))} ${x.u}`).join('; ');
-  const pasto=$('#pasto').value,dieta=$('#dieta').value,stile=$('#stile').value;
-  return `Sei un cuoco italiano e nutrizionista pratico. Inventa 3 ricette NUOVE e diverse tra loro, per UNA SOLA PERSONA (una porzione).
+  const dieta=$('#dieta').value,stile=$('#stile').value,P=pasti.slice();
+  return `Sei un cuoco italiano e nutrizionista pratico. Inventa 3 proposte NUOVE e diverse tra loro, per UNA SOLA PERSONA (una porzione).
 
 IL MIO MAGAZZINO (ingrediente: quantità disponibile): ${inv}.
 Ho sempre anche sale, pepe, olio extravergine d'oliva e acqua.
 
 REGOLE OBBLIGATORIE, da rispettare tutte:
-1. CALORIE: ogni ricetta deve dare in totale ${k} kcal (tra ${Math.round(k*0.95)} e ${Math.round(k*1.05)}). Scegli i grammi di ogni ingrediente per arrivarci. Conta anche l'olio.
-2. TIPO DI PIATTO: ${pasto==='qualsiasi'?'qualsiasi':pasto==='dolce'?'un DOLCE (dessert)':pasto}.
+1. PORTATE: ${!P.length?'scegli tu il tipo di piatto più adatto (una sola portata)':P.length===1?`ogni proposta è UNA sola portata di tipo "${P[0]}"`:`ogni proposta è un MENU composto ESATTAMENTE da ${P.length} portate, una per ciascun tipo, in quest'ordine: ${P.join(', ')}. Le portate devono abbinarsi bene tra loro (sapori, stagione, cottura) e non ripetere lo stesso ingrediente principale`}.
+   Significato dei tipi: colazione = piatto per la colazione; spuntino = piccolo pasto tra i pasti; antipasto = piccola entrata prima del pasto; primo = piatto a base di pasta, riso, cereali, gnocchi, zuppa o minestra; secondo = piatto principale proteico (carne, pesce, uova, legumi, formaggi o tofu); contorno = verdure, insalata o patate di accompagnamento; dolce = dessert.
+2. CALORIE: ogni proposta deve dare in totale ${k} kcal (tra ${Math.round(k*0.95)} e ${Math.round(k*1.05)})${P.length>1?', sommando tutte le portate; distribuiscile in modo sensato tra le portate':''}. Scegli i grammi di ogni ingrediente per arrivarci. Conta anche l'olio.
 3. TEMPO: ${t==='qualsiasi'?'nessun limite':`al massimo ${t} minuti in tutto, cottura compresa`}.
 4. ESIGENZE ALIMENTARI: ${dieta==='nessuna'?'nessuna':dieta+'. Non usare nessun ingrediente che non la rispetti, anche se è nel magazzino'}.
 5. DA COMPRARE: ${m==='0'?'NESSUN ingrediente: usa solo il magazzino più sale, pepe, olio e acqua':`al massimo ${m} ingredienti che non sono nel magazzino, segnati con "da_comprare": true`}.
@@ -261,10 +270,10 @@ REGOLE OBBLIGATORIE, da rispettare tutte:
 7. STILE: ${stile}.${wish?`\n8. RICHIESTA PARTICOLARE: ${wish}.`:''}
 ${shown.length?`Non ripetere queste ricette già proposte e cambia tipo di piatto: ${shown.join('; ')}.\n`:''}
 Se le regole insieme rendono impossibile una ricetta (per esempio un dolce vegano senza ingredienti adatti), proponi comunque la soluzione più vicina e spiega cosa non hai potuto rispettare nel campo "nota". Altrimenti lascia "nota" vuota.
-Procedimento in massimo 6 passaggi brevi e chiari.
+Procedimento in massimo 6 passaggi brevi e chiari per ogni portata. "tipo" deve essere esattamente una di queste parole: colazione, spuntino, antipasto, primo, secondo, contorno, dolce.
 Per ogni ingrediente indica quantità a crudo come numero "q" e unità "u" tra "g", "ml" o "pz", e le kcal di quella quantità con valori realistici. Per sale, pepe e spezie usa q 0 e u "q.b.". Usa per "nome" lo stesso nome del mio magazzino quando l'ingrediente viene da lì.
 Rispondi SOLO con JSON valido, senza testo e senza blocchi di codice:
-{"ricette":[{"nome":"","descrizione":"una frase invitante","tempo":"20 min","difficolta":"facile","ingredienti":[{"nome":"","q":0,"u":"g","kcal":0,"da_comprare":false}],"proteine_g":0,"carboidrati_g":0,"grassi_g":0,"passaggi":["passo 1"],"consiglio":"un trucco utile","nota":""}]}
+{"ricette":[{"nome":"nome della proposta","descrizione":"una frase invitante","tempo":"20 min in tutto","difficolta":"facile","portate":[{"tipo":"secondo","nome":"","ingredienti":[{"nome":"","q":0,"u":"g","kcal":0,"da_comprare":false}],"passaggi":["passo 1"]}],"proteine_g":0,"carboidrati_g":0,"grassi_g":0,"consiglio":"un trucco utile","nota":""}]}
 Tutto in italiano.`;
 }
 
@@ -275,9 +284,42 @@ const ANIMAL=['uov','latte','burro','formaggio','parmigiano','grana','pecorino',
 const GLUTEN=['pasta','pane','farina','couscous','cous cous','orzo','farro','seitan','biscott','pangrattato','crackers','grissini','piadina','pizza','savoiardi','semola'];
 const LACTO=['latte','burro','formaggio','parmigiano','grana','pecorino','mozzarella','ricotta','mascarpone','yogurt','panna','stracchino'];
 const hasAny=(n,list)=>list.some(w=>n.includes(w));
-function findMag(name){const k=norm(name);return mag.find(m=>norm(m.n)===k)||mag.find(m=>{const n=norm(m.n);return n.length>2&&(k.includes(n)||n.includes(k))})}
+const STOP=['di','del','della','dei','delle','al','alla','allo','ai','con','e','in','da','il','la','lo','le','gli','i','un','una','fresco','fresca','freschi','fresche','grande','grandi','piccolo','piccola','intero','intera','00','bio','tipo'];
+const stem=w=>w.length>3?w.replace(/(he|hi)$/,'h').replace(/[aeiou]$/,''):w;
+const SYN={spaghett:'past',penn:'past',fusill:'past',rigaton:'past',linguin:'past',farfall:'past',maccheron:'past',tagliatell:'past',bucatin:'past',paccher:'past',orecchiett:'past',gran:'parmigian',macinat:'carne macinat'};
+const stems=s=>norm(s).replace(/[^a-z0-9 ]/g,' ').split(' ').filter(w=>w&&!STOP.includes(w)).map(stem).map(w=>SYN[w]||w);
+/* due nomi indicano lo stesso ingrediente se tutte le parole del più corto compaiono nel più lungo (singolare/plurale e diminutivi compresi) */
+const DIM=['in','ett','ell'];
+const wmatch=(w,x)=>w===x||(x.startsWith(w)&&DIM.includes(x.slice(w.length)))||(w.startsWith(x)&&DIM.includes(w.slice(x.length)));
+/* parole che cambiano l'ingrediente: latte di cocco non è latte, pasta frolla non è pasta */
+const CHANGE=['cocc','soi','mandorl','aven','ris','froll','sfogli','bris','vegetal','secc','polver','concentrat','arachid','condensat','cioccolat','dad','lievit'];
+function sameIng(a,b){const A=stems(a),B=stems(b);if(!A.length||!B.length)return false;const [s,l]=A.length<=B.length?[A,B]:[B,A];
+  if(!s.every(w=>l.some(x=>wmatch(w,x))))return false;
+  const extra=l.filter(x=>!s.some(w=>wmatch(w,x)));return !extra.some(x=>CHANGE.some(c=>x.startsWith(c)))}
+function findMag(name){const k=norm(name);return mag.find(m=>norm(m.n)===k)||mag.find(m=>sameIng(m.n,name))}
+const CARB=['pasta','spaghett','penne','fusill','rigaton','riso','risott','gnocch','orzo','farro','couscous','cous cous','quinoa','polenta','lasagn','zupp','minestr','vellutat','pane','tortellin','ravioli','noodle','cereal','avena','patat','legum','ceci','lenticch','fagiol'];
+const PROT=['carne','pollo','tacchino','manzo','vitello','maiale','agnello','prosciutto','salsiccia','hamburger','polpett','pesce','tonno','salmone','merluzzo','orata','branzino','gamber','calamar','polpo','cozz','vongol','uov','frittat','omelette','legum','ceci','lenticch','fagiol','tofu','tempeh','seitan','formagg','mozzarella','ricotta','feta','halloumi','parmigiano','scamorza','provola'];
+function flatten(r){
+  if(Array.isArray(r.portate)&&r.portate.length){
+    r.portate=r.portate.filter(p=>p&&typeof p==='object');
+    r.portate.forEach(p=>{p.tipo=norm(p.tipo||'');(p.ingredienti=Array.isArray(p.ingredienti)?p.ingredienti:[]).forEach(x=>x.portata=p.tipo)});
+    r.ingredienti=r.portate.flatMap(p=>p.ingredienti);
+    r.passaggi=r.portate.flatMap(p=>Array.isArray(p.passaggi)?p.passaggi:[]);
+  }
+  return r;
+}
 function verify(r,set){
   const warns=[];let fixed='';
+  flatten(r);
+  /* portate scelte */
+  if(set.pasti.length&&Array.isArray(r.portate)){
+    const got=r.portate.map(p=>p.tipo);
+    set.pasti.filter(t=>!got.includes(t)).forEach(t=>warns.push(`manca la portata: ${t}`));
+    got.filter(t=>t&&!set.pasti.includes(t)).forEach(t=>warns.push(`portata non richiesta: ${t}`));
+    r.portate.forEach(p=>{const txt=norm(p.nome+' '+p.ingredienti.map(x=>x.nome).join(' '));
+      if(p.tipo==='primo'&&!hasAny(txt,CARB))warns.push(`“${p.nome}” non sembra un primo`);
+      if(p.tipo==='secondo'&&!hasAny(txt,PROT))warns.push(`“${p.nome}” non sembra un secondo (manca una fonte di proteine)`);});
+  }
   const ing=Array.isArray(r.ingredienti)?r.ingredienti:[];
   /* ingredienti non presenti nel magazzino: vanno comprati */
   ing.forEach(x=>{const n=norm(x.nome);if(!x.da_comprare&&!findMag(x.nome)&&!hasAny(n,BASICS)&&num(x.q)>0)x.da_comprare=true});
@@ -324,7 +366,7 @@ function card(r,mode){
   const sv=isSaved(r);
   return `<article class="rec" data-id="${esc(r.id)}">
     <div class="rtop"><div><h3>${esc(r.nome)}</h3>
-    <div class="meta"><span>${esc(r.tempo)}</span><span>${esc(r.difficolta)}</span><span>1 persona</span></div></div>
+    <div class="meta">${isMenu(r)&&r.portate.length>1?`<span>${esc(r.portate.length)} portate</span>`:''}<span>${esc(r.tempo)}</span><span>${esc(r.difficolta)}</span><span>1 persona</span></div></div>
     <div class="kdisc" aria-label="${esc(sum)} chilocalorie"><div><b>${esc(sum)}</b><small>kcal</small></div></div></div>
     ${mode==='saved'&&r.data?`<div class="date">Salvata il ${esc(new Date(r.data).toLocaleDateString('it-IT',{day:'numeric',month:'long'}))}${r.cucinata?` · cucinata ${esc(r.cucinata)} ${r.cucinata===1?'volta':'volte'}`:''}</div>`:''}
     <p>${esc(r.descrizione)}</p>
@@ -332,10 +374,10 @@ function card(r,mode){
     <div class="goal"><span>${esc(real)}% del tuo obiettivo di ${esc(target)} kcal</span>
     <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div></div>
     <div class="macro"><div><span><b>${esc(Math.round(num(r.proteine_g)))} g</b>proteine</span></div><div><span><b>${esc(Math.round(num(r.carboidrati_g)))} g</b>carboidrati</span></div><div><span><b>${esc(Math.round(num(r.grassi_g)))} g</b>grassi</span></div></div>
-    <table><tbody>${ing.map(x=>`<tr class="${x.da_comprare?'miss':''}"><td>${esc(x.nome)}</td><td class="g">${esc(qtxt(x))}</td><td class="n">${esc(Math.round(num(x.kcal)))} kcal</td></tr>`).join('')}</tbody></table>
+    ${portateHTML(r)}
     ${ing.some(x=>x.da_comprare)?'<div class="legend">In rosso: da comprare</div>':''}
     <details class="steps"><summary>Procedimento</summary>
-      <ol>${(Array.isArray(r.passaggi)?r.passaggi:[]).map(p=>`<li>${esc(p)}</li>`).join('')}</ol>
+      ${stepsHTML(r)}
       ${r.consiglio?`<div class="tip"><b>Consiglio:</b> ${esc(r.consiglio)}</div>`:''}
     </details>
     <div class="acts">
@@ -345,7 +387,21 @@ function card(r,mode){
     </div>
   </article>`;
 }
+const rows=list=>`<table><tbody>${list.map(x=>`<tr class="${x.da_comprare?'miss':''}"><td>${esc(x.nome)}</td><td class="g">${esc(qtxt(x))}</td><td class="n">${esc(Math.round(num(x.kcal)))} kcal</td></tr>`).join('')}</tbody></table>`;
+const isMenu=r=>Array.isArray(r.portate)&&r.portate.length>0;
+function portateHTML(r){
+  if(!isMenu(r))return rows(Array.isArray(r.ingredienti)?r.ingredienti:[]);
+  return r.portate.map(p=>`<div class="portata"><div class="ph"><span class="pi">${MEAL_ICONS[p.tipo]||MEAL_ICONS.secondo}</span><span><small>${esc(p.tipo||'portata')}</small><strong>${esc(p.nome)}</strong></span><em>${esc(Math.round(p.ingredienti.reduce((a,x)=>a+num(x.kcal),0)))} kcal</em></div>${rows(p.ingredienti)}</div>`).join('');
+}
+function stepsHTML(r){
+  if(!isMenu(r)||r.portate.length===1)return `<ol>${(Array.isArray(r.passaggi)?r.passaggi:[]).map(p=>`<li>${esc(p)}</li>`).join('')}</ol>`;
+  return r.portate.map(p=>`<h4>${esc(p.tipo)}: ${esc(p.nome)}</h4><ol>${(Array.isArray(p.passaggi)?p.passaggi:[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`).join('');
+}
 function asText(r){
+  if(isMenu(r)&&r.portate.length>1){
+    const parts=r.portate.map(p=>`${p.tipo.toUpperCase()}: ${p.nome}\n${p.ingredienti.map(x=>`- ${x.nome}: ${qtxt(x)} (${Math.round(num(x.kcal))} kcal)`).join('\n')}\n${(p.passaggi||[]).map((s,i)=>`${i+1}. ${s}`).join('\n')}`).join('\n\n');
+    return `${r.nome} (1 persona, circa ${total(r)} kcal)\n\n${parts}${r.consiglio?'\n\nConsiglio: '+r.consiglio:''}`;
+  }
   const ing=(r.ingredienti||[]).map(x=>`- ${x.nome}: ${qtxt(x)} (${Math.round(num(x.kcal))} kcal)`).join('\n');
   const st=(r.passaggi||[]).map((p,i)=>`${i+1}. ${p}`).join('\n');
   return `${r.nome} (1 persona, circa ${total(r)} kcal)\n\nIngredienti:\n${ing}\n\nProcedimento:\n${st}${r.consiglio?'\n\nConsiglio: '+r.consiglio:''}`;
@@ -360,8 +416,7 @@ function cooked(r){
   const prev=JSON.parse(JSON.stringify(mag));const changed=[];
   (r.ingredienti||[]).forEach(x=>{
     if(x.da_comprare||!num(x.q))return;
-    const k=norm(x.nome);
-    const it=mag.find(m=>norm(m.n)===k)||mag.find(m=>{const n=norm(m.n);return n.length>2&&(k.includes(n)||n.includes(k))});
+    const it=findMag(x.nome);
     if(!it)return;
     const d=conv(num(x.q),x.u||'g',it.u);if(d==null)return;
     it.q=Math.max(0,Math.round((num(it.q)-d)*100)/100);changed.push(it.n);
@@ -407,18 +462,18 @@ async function crea(more){
   busy=true;['#crea','#altre'].forEach(s=>$(s).disabled=true);$('#crea').textContent='Sto cucinando le idee…';
   out.insertAdjacentHTML('beforeend',`<div class="skel cook">${POT}<p>Sto mescolando gli ingredienti…</p></div>`);
   ctl=new AbortController();const t0=Date.now();let cur='';
-  const tick=()=>{st.textContent=`Sto inventando 3 ricette da circa ${kc.value} kcal… ${Math.round((Date.now()-t0)/1000)} s${cur?` · ${cur}`:''}`};
+  const tick=()=>{st.textContent=`Sto inventando ${pasti.length>1?'3 menu':'3 ricette'} da circa ${kc.value} kcal… ${Math.round((Date.now()-t0)/1000)} s${cur?` · ${cur}`:''}`};
   tick();const iv=setInterval(tick,1000);$('#stop').hidden=false;
   try{
     const text=getKey()?await askGemini(prompt(),m=>{cur=m;tick()}):(await claudeSample(prompt(),{cache:false,signal:ctl.signal})).text;
     let data;try{data=parseJSON(text||'')}catch(x){const e=new Error('json');throw e}
-    const set={kcal:+kc.value,manca:+$('#manca').value,tempo:$('#tempo').value,dieta:$('#dieta').value};
+    const set={kcal:+kc.value,manca:+$('#manca').value,tempo:$('#tempo').value,dieta:$('#dieta').value,pasti:pasti.slice()};
     const rs=(data.ricette||[]).filter(r=>r&&r.nome).map(r=>verify({...r,id:uid(),target:+kc.value},set));
     if(!rs.length)throw new Error('vuoto');
     out.querySelectorAll('.skel').forEach(s=>s.remove());
     recs.push(...rs);shown.push(...rs.map(r=>r.nome));
     out.insertAdjacentHTML('beforeend',rs.map(r=>card(r,'new')).join(''));
-    st.textContent=`${recs.length} ricette per 1 persona, circa ${kc.value} kcal ciascuna (in ${Math.round((Date.now()-t0)/1000)} s). Salva quelle che ti piacciono.`;
+    st.textContent=`${recs.length} ${pasti.length>1?'menu':'ricette'} per 1 persona, circa ${kc.value} kcal ciascun${pasti.length>1?'o':'a'} (in ${Math.round((Date.now()-t0)/1000)} s). Salva ${pasti.length>1?'quelli':'quelle'} che ti piacciono.`;
     $('#more').hidden=false;
   }catch(e){
     out.querySelectorAll('.skel').forEach(s=>s.remove());
