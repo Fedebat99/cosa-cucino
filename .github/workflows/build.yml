@@ -1,0 +1,35 @@
+name: Crea APK
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Chiave di firma
+        run: base64 -d app/keystore.b64 > app/cosacucino.jks
+      - name: Compila
+        run: gradle assembleRelease --no-daemon
+      - name: Rinomina
+        run: cp app/build/outputs/apk/release/app-release.apk CosaCucino.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CosaCucino-apk
+          path: CosaCucino.apk
+      - name: Pubblica release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Cosa cucino ${{ github.run_number }}
+          files: CosaCucino.apk
