@@ -15,11 +15,12 @@
   <div class="hero">
     <div>
       <h1 class="brand">Cosa cucino</h1>
-      <p>Il tuo magazzino, ricette create su misura per te e le preferite da rifare.</p>
+      <p>La lista della spesa, il tuo magazzino, ricette create su misura per te e le preferite da rifare.</p>
     </div>
     <svg class="dots" aria-hidden="true" preserveAspectRatio="xMaxYMid meet" viewBox="1320 140 1140 1150"><circle class="fl f1" style="animation-delay:-0.7s" cx="1666" cy="521" r="320" fill="#F0A21A"/><circle class="fl f2" style="animation-delay:-1.4s" cx="2159" cy="400" r="195" fill="#E3170A"/><circle class="fl f3" style="animation-delay:-2.1s" cx="1725" cy="1058" r="207" fill="#FFD900"/><circle class="fl f0" style="animation-delay:-2.8s" cx="2271" cy="757" r="175" fill="#FFD900"/><circle class="fl f1" style="animation-delay:-3.5s" cx="2098" cy="1065" r="170" fill="#F4B6C6"/><circle class="fl f2" style="animation-delay:-4.2s" cx="1933" cy="1239" r="57" fill="#FFFFFF"/><circle class="fl f3" style="animation-delay:-4.9s" cx="2316" cy="995" r="47" fill="#FFFFFF"/><circle class="fl f0" style="animation-delay:-5.6s" cx="1478" cy="893" r="58" fill="#FFFFFF"/><circle class="fl f1" style="animation-delay:-6.3s" cx="1926" cy="850" r="47" fill="#FFFFFF"/><circle class="fl f2" style="animation-delay:-7.0s" cx="2012" cy="727" r="58" fill="#FFFFFF"/><circle class="fl f3" style="animation-delay:-7.7s" cx="2388" cy="531" r="58" fill="#FFFFFF"/><circle class="fl f0" style="animation-delay:-8.4s" cx="1945" cy="227" r="62" fill="#FFFFFF"/></svg>
   </div>
   <nav class="tabs" aria-label="Sezioni">
+    <a href="#spesa" data-t="spesa"><i></i><span class="x">Lista della </span>spesa <span class="cnt" id="c-spe">0</span></a>
     <a href="#magazzino" data-t="magazzino"><i></i><span class="x">Il mio </span>magazzino <span class="cnt" id="c-mag">0</span></a>
     <a href="#crea" data-t="crea"><i></i>Crea<span class="x"> ricette</span></a>
     <a href="#salvate" data-t="salvate"><i></i><span class="x">Ricette </span>salvate <span class="cnt" id="c-sav">0</span></a>
@@ -27,6 +28,30 @@
 </div></header>
 
 <main class="band"><div class="wrap">
+
+<!-- 0. SPESA -->
+<section id="v-spesa" aria-labelledby="h-spe" hidden>
+  <div class="head"><span class="art art-borsa"><svg viewBox="0 0 200 200" aria-hidden="true"><path d="M66 100 V62 Q66 30 100 30 Q134 30 134 62 V100" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/><g class="k1"><circle cx="70" cy="78" r="26" fill="#FFD900"/></g><g class="k2"><circle cx="118" cy="62" r="32" fill="#E3170A"/></g><g class="k3"><circle cx="156" cy="82" r="18" fill="#F4B6C6"/></g><path d="M30 96 H170 L156 176 Q154 186 144 186 H56 Q46 186 44 176 Z" fill="#FFFFFF"/><path d="M36 120 H164 L161.6 134 H38.4 Z" fill="#F0A21A"/></svg></span><div><h2 id="h-spe">Lista della spesa</h2><p>Spunta quello che compri: con un tocco finisce nel magazzino.</p></div></div>
+  <div class="board">
+    <form id="sadd" autocomplete="off">
+      <label class="l" for="snome">Cosa devi comprare?</label>
+      <div class="addrow">
+        <input id="snome" type="text" placeholder="es. latte, uova, pane" required>
+        <input id="sqta" type="number" inputmode="decimal" min="0" step="any" placeholder="Quantità" aria-label="Quantità (facoltativa)">
+        <select id="sunita" aria-label="Unità"><option>g</option><option>kg</option><option>ml</option><option>l</option><option selected>pz</option></select>
+        <button class="btn-tom" type="submit">Aggiungi</button>
+      </div>
+      <p class="hint">Puoi scriverne più di uno separati da virgola. La quantità è facoltativa.</p>
+    </form>
+    <div class="ssugg" id="ssugg"></div>
+  </div>
+  <div class="tools">
+    <button type="button" class="btn-ghost sm" id="copia-spe">Copia la lista</button>
+    <button type="button" class="btn-ghost sm" id="svuota-spe">Svuota lista</button>
+  </div>
+  <div id="slist"></div>
+  <div class="cartbar" id="cartbar" hidden><span id="cartn"></span><button type="button" id="intomag">Metti nel magazzino</button></div>
+</section>
 
 <!-- 1. MAGAZZINO -->
 <section id="v-magazzino" aria-labelledby="h-mag">
@@ -108,7 +133,12 @@
 </section>
 
 </div></main>
-<footer><div class="wrap">Magazzino e ricette salvate restano su questo dispositivo. Calorie e valori sono stime dell'AI: pesa gli ingredienti per restare nel tuo obiettivo e controlla sempre allergeni e cotture.</div></footer>
+<footer><div class="wrap">Lista della spesa, magazzino e ricette salvate restano su questo dispositivo. Calorie e valori sono stime dell'AI: pesa gli ingredienti per restare nel tuo obiettivo e controlla sempre allergeni e cotture.</div></footer>
+<div class="sheet" id="sheet" hidden><div class="sbox" role="dialog" aria-modal="true" aria-labelledby="sh-t">
+  <h3 id="sh-t">Quanto hai comprato?</h3><p>Manca la quantità per questi prodotti. Scrivila e li metto nel magazzino.</p>
+  <div id="shrows"></div>
+  <div class="sacts"><button type="button" class="btn-ghost" id="shno">Annulla</button><button type="button" class="btn-tom" id="shok">Metti nel magazzino</button></div>
+</div></div>
 <div class="toast" id="toast" role="status" hidden><span id="toastmsg"></span><button type="button" id="undo">Annulla</button></div>
 
 <script src="app.js"></script>

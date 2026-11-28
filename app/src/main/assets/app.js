@@ -11,9 +11,9 @@ const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''
 const fmt=n=>{const r=Math.round(n*10)/10;return String(r).replace('.',',')};
 const PLATE='<svg aria-hidden="true" viewBox="540 200 1500 1040"><g class="fork" fill="#FFFFFF"><rect x="597" y="334" width="124" height="256" rx="24"/><rect x="635" y="560" width="48" height="545" rx="24"/></g><g fill="#0A0A0A"><rect x="621" y="300" width="14" height="190" rx="7"/><rect x="683" y="300" width="14" height="190" rx="7"/></g><path class="knife" d="M1980 360 V1081 a24 24 0 0 1 -48 0 V765 h-19 a24 24 0 0 1 -24 -24 V405 a71 71 0 0 1 67 -71 a24 24 0 0 1 24 26 Z" fill="#FFFFFF"/><circle cx="1288" cy="719" r="477" fill="#FFFFFF"/><circle cx="1288" cy="719" r="279" fill="#E3E3E3"/><g class="orbit"><circle cx="1608" cy="356" r="119" fill="#0A0A0A"/><circle cx="1608" cy="356" r="99" fill="#F4B6C6"/></g></svg>';
 const POT='<svg aria-hidden="true" class="potsvg" viewBox="780 160 1016 1110"><path d="M966 896 H1610 A322 322 0 0 1 966 896 Z" fill="#E3170A"/><rect x="836" y="896" width="110" height="67" rx="14" fill="#E3170A"/><rect x="1630" y="896" width="110" height="67" rx="14" fill="#E3170A"/><circle class="b b1" cx="1288" cy="724" r="129" fill="#FFD900"/><circle class="b b2" cx="1288" cy="455" r="86" fill="#F0A21A"/><circle class="b b3" cx="1288" cy="263" r="54" fill="#F4B6C6"/></svg>';
-const ARTS={magazzino:'<svg viewBox="0 0 200 200" aria-hidden="true"><rect x="22" y="96" width="156" height="9" rx="4.5" fill="#FFFFFF"/><rect x="22" y="166" width="156" height="9" rx="4.5" fill="#FFFFFF"/><g class="j1"><rect x="34" y="46" width="34" height="50" rx="9" fill="#FFD900"/><rect x="38" y="38" width="26" height="10" rx="5" fill="#FFFFFF"/></g><g class="j2"><circle cx="96" cy="78" r="18" fill="#F0A21A"/></g><g class="j3"><rect x="126" y="56" width="40" height="40" rx="10" fill="#F4B6C6"/><rect x="132" y="48" width="28" height="10" rx="5" fill="#FFFFFF"/></g><g class="j4"><rect x="36" y="124" width="46" height="42" rx="10" fill="#E3170A"/><rect x="44" y="116" width="30" height="10" rx="5" fill="#FFFFFF"/></g><g class="j5"><circle cx="108" cy="151" r="15" fill="#FFD900"/><circle cx="138" cy="151" r="15" fill="#F0A21A"/></g><g class="j6"><circle cx="165" cy="155" r="10" fill="#F4B6C6"/></g></svg>',crea:'<svg aria-hidden="true" viewBox="780 160 1016 1110"><path d="M966 896 H1610 A322 322 0 0 1 966 896 Z" fill="#E3170A"/><rect x="836" y="896" width="110" height="67" rx="14" fill="#E3170A"/><rect x="1630" y="896" width="110" height="67" rx="14" fill="#E3170A"/><circle class="b b1" cx="1288" cy="724" r="129" fill="#FFD900"/><circle class="b b2" cx="1288" cy="455" r="86" fill="#F0A21A"/><circle class="b b3" cx="1288" cy="263" r="54" fill="#F4B6C6"/></svg>',salvate:'<svg aria-hidden="true" viewBox="900 340 780 760"><rect class="pg1" x="946" y="596" width="320" height="462" rx="40" fill="#FFFFFF"/><rect class="pg2" x="1310" y="596" width="321" height="462" rx="40" fill="#FFFFFF"/><path class="heart" d="M1157 704 L1010 505 A88 88 0 0 1 1157 420 A88 88 0 0 1 1304 505 Z" fill="#F4B6C6"/><circle class="d1" cx="1417" cy="520" r="44" fill="#E3170A"/><circle class="d2" cx="1524" cy="467" r="42" fill="#FFD900"/></svg>'};
+const ARTS={spesa:'<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M66 100 V62 Q66 30 100 30 Q134 30 134 62 V100" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/><g class="k1"><circle cx="70" cy="78" r="26" fill="#FFD900"/></g><g class="k2"><circle cx="118" cy="62" r="32" fill="#E3170A"/></g><g class="k3"><circle cx="156" cy="82" r="18" fill="#F4B6C6"/></g><path d="M30 96 H170 L156 176 Q154 186 144 186 H56 Q46 186 44 176 Z" fill="#FFFFFF"/><path d="M36 120 H164 L161.6 134 H38.4 Z" fill="#F0A21A"/></svg>',magazzino:'<svg viewBox="0 0 200 200" aria-hidden="true"><rect x="22" y="96" width="156" height="9" rx="4.5" fill="#FFFFFF"/><rect x="22" y="166" width="156" height="9" rx="4.5" fill="#FFFFFF"/><g class="j1"><rect x="34" y="46" width="34" height="50" rx="9" fill="#FFD900"/><rect x="38" y="38" width="26" height="10" rx="5" fill="#FFFFFF"/></g><g class="j2"><circle cx="96" cy="78" r="18" fill="#F0A21A"/></g><g class="j3"><rect x="126" y="56" width="40" height="40" rx="10" fill="#F4B6C6"/><rect x="132" y="48" width="28" height="10" rx="5" fill="#FFFFFF"/></g><g class="j4"><rect x="36" y="124" width="46" height="42" rx="10" fill="#E3170A"/><rect x="44" y="116" width="30" height="10" rx="5" fill="#FFFFFF"/></g><g class="j5"><circle cx="108" cy="151" r="15" fill="#FFD900"/><circle cx="138" cy="151" r="15" fill="#F0A21A"/></g><g class="j6"><circle cx="165" cy="155" r="10" fill="#F4B6C6"/></g></svg>',crea:'<svg aria-hidden="true" viewBox="780 160 1016 1110"><path d="M966 896 H1610 A322 322 0 0 1 966 896 Z" fill="#E3170A"/><rect x="836" y="896" width="110" height="67" rx="14" fill="#E3170A"/><rect x="1630" y="896" width="110" height="67" rx="14" fill="#E3170A"/><circle class="b b1" cx="1288" cy="724" r="129" fill="#FFD900"/><circle class="b b2" cx="1288" cy="455" r="86" fill="#F0A21A"/><circle class="b b3" cx="1288" cy="263" r="54" fill="#F4B6C6"/></svg>',salvate:'<svg aria-hidden="true" viewBox="900 340 780 760"><rect class="pg1" x="946" y="596" width="320" height="462" rx="40" fill="#FFFFFF"/><rect class="pg2" x="1310" y="596" width="321" height="462" rx="40" fill="#FFFFFF"/><path class="heart" d="M1157 704 L1010 505 A88 88 0 0 1 1157 420 A88 88 0 0 1 1304 505 Z" fill="#F4B6C6"/><circle class="d1" cx="1417" cy="520" r="44" fill="#E3170A"/><circle class="d2" cx="1524" cy="467" r="42" fill="#FFD900"/></svg>'};
 const MEAL_ICONS={colazione:'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="70" cy="30" r="18" fill="#FFD900"/><rect x="18" y="44" width="46" height="40" rx="12" fill="#FFFFFF"/><rect x="58" y="52" width="16" height="22" rx="8" fill="none" stroke="#FFFFFF" stroke-width="7"/><circle cx="41" cy="46" r="17" fill="#F0A21A"/></svg>',spuntino:'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="58" r="30" fill="#E3170A"/><path d="M52 30 C54 14 68 10 76 12 C74 24 64 30 52 30 Z" fill="#FFD900"/><rect x="47" y="20" width="6" height="16" rx="3" fill="#FFFFFF"/></svg>',antipasto:'<svg viewBox="0 0 100 100" aria-hidden="true"><rect x="10" y="58" width="80" height="16" rx="8" fill="#FFFFFF"/><circle cx="28" cy="46" r="12" fill="#E3170A"/><circle cx="50" cy="44" r="14" fill="#FFD900"/><circle cx="72" cy="46" r="12" fill="#F4B6C6"/><rect x="48" y="16" width="4" height="20" rx="2" fill="#FFFFFF"/></svg>',primo:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M12 50 H88 A38 38 0 0 1 12 50 Z" fill="#F0A21A"/><circle cx="38" cy="42" r="11" fill="#FFD900"/><circle cx="56" cy="38" r="13" fill="#FFD900"/><circle cx="70" cy="45" r="8" fill="#FFD900"/><circle cx="48" cy="26" r="7" fill="#E3170A"/></svg>',secondo:'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="52" r="38" fill="#FFFFFF"/><circle cx="44" cy="54" r="20" fill="#E3170A"/><circle cx="68" cy="40" r="8" fill="#FFD900"/><circle cx="66" cy="66" r="6" fill="#F4B6C6"/></svg>',contorno:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M14 54 H86 A36 36 0 0 1 14 54 Z" fill="#FFFFFF"/><ellipse cx="36" cy="40" rx="16" ry="9" transform="rotate(-25 36 40)" fill="#FFD900"/><ellipse cx="62" cy="38" rx="16" ry="9" transform="rotate(25 62 38)" fill="#F4B6C6"/><circle cx="50" cy="46" r="8" fill="#E3170A"/></svg>',dolce:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M18 78 L82 78 Q86 78 84 74 L56 30 Q50 22 44 30 L16 74 Q14 78 18 78 Z" fill="#F4B6C6"/><rect x="16" y="78" width="68" height="8" rx="4" fill="#FFFFFF"/><circle cx="50" cy="22" r="9" fill="#E3170A"/></svg>'};
-const TITLES={magazzino:'Il mio magazzino',crea:'Crea ricette',salvate:'Ricette salvate'};
+const TITLES={spesa:'Lista della spesa',magazzino:'Il mio magazzino',crea:'Crea ricette',salvate:'Ricette salvate'};
 const emptyArt=t=>`<div class="emptyart"><div class="pl">${PLATE}</div><p>${t}</p></div>`;
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
@@ -25,14 +25,14 @@ const saveMag=()=>{store.set('cc-mag',mag);$('#c-mag').textContent=mag.length;us
 const saveSaved=()=>{store.set('cc-saved',saved);$('#c-sav').textContent=saved.length};
 
 /* ---------- schede ---------- */
-const VIEWS=['magazzino','crea','salvate'];
+const VIEWS=['spesa','magazzino','crea','salvate'];
 let firstRoute=true,tx='50%',ty='10%';
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a){const r=a.getBoundingClientRect();tx=Math.round(r.left+r.width/2)+'px';ty=Math.round(r.top+r.height/2)+'px'}},true);
 function showTrans(v){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const t=$('#trans');t.classList.remove('on');void t.offsetWidth;
   t.style.setProperty('--x',tx);t.style.setProperty('--y',ty);
-  t.querySelector('.tart').innerHTML=`<span class="art-${v==='magazzino'?'dispensa':v==='crea'?'pentola':'libro'}" style="display:block;width:100%;height:100%">${ARTS[v]}</span>`;
+  t.querySelector('.tart').innerHTML=`<span class="art-${{spesa:'borsa',magazzino:'dispensa',crea:'pentola',salvate:'libro'}[v]}" style="display:block;width:100%;height:100%">${ARTS[v]}</span>`;
   t.querySelector('.tname').textContent=TITLES[v];
   t.classList.add('on');clearTimeout(showTrans.tm);showTrans.tm=setTimeout(()=>t.classList.remove('on'),950);
   tx='50%';ty='10%';
@@ -44,16 +44,19 @@ function route(){
   VIEWS.forEach(x=>{$('#v-'+x).hidden=x!==v;const a=document.querySelector(`.tabs a[data-t="${x}"]`);if(x===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
   if(v==='salvate')renderSaved();
   if(v==='crea')usesLine();
+  if(v==='spesa')renderSpesa();
+  cartBar();
 }
 addEventListener('hashchange',route);
 
 /* ---------- magazzino ---------- */
 const QUICK=[['uova',6,'pz'],['pasta',500,'g'],['riso',500,'g'],['pomodori',500,'g'],['cipolla',2,'pz'],['aglio',1,'pz'],['patate',1,'kg'],['petto di pollo',400,'g'],['tonno',2,'pz'],['mozzarella',125,'g'],['yogurt greco',500,'g'],['latte',1,'l'],['avena',500,'g'],['ceci',400,'g'],['pane',300,'g'],['limone',2,'pz']];
+const isLow=x=>(x.u==='pz'&&x.q<=1)||((x.u==='g'||x.u==='ml')&&x.q<=50)||((x.u==='kg'||x.u==='l')&&x.q<=0.05);
 function renderMag(){
   const q=norm($('#cerca-mag').value);
   const list=mag.filter(x=>!q||norm(x.n).includes(q));
   $('#inv').innerHTML=mag.length?(list.length?list.map(x=>{
-    const low=(x.u==='pz'&&x.q<=1)||((x.u==='g'||x.u==='ml')&&x.q<=50)||((x.u==='kg'||x.u==='l')&&x.q<=0.05);
+    const low=isLow(x);
     return `<div class="item${low?' low':''}" data-id="${esc(x.id)}">
       <span class="nm">${esc(x.n)}</span>
       <input type="number" inputmode="decimal" min="0" step="any" value="${esc(x.q)}" aria-label="Quantità di ${esc(x.n)}" data-f="q">
@@ -63,6 +66,7 @@ function renderMag(){
   const have=new Set(mag.map(x=>norm(x.n)));
   $('#sugg').innerHTML=QUICK.filter(([n])=>!have.has(n)).slice(0,10).map(([n,q,u])=>`<button type="button" data-n="${esc(n)}" data-q="${q}" data-u="${u}">+ ${esc(n)} ${esc(fmt(q))} ${esc(u)}</button>`).join('');
   saveMag();
+  if(!$('#v-spesa').hidden)renderSpesa();
 }
 function addItem(n,q,u){
   n=n.trim().toLowerCase();if(!n)return;
@@ -94,6 +98,112 @@ $('#inv').addEventListener('click',e=>{
 });
 $('#cerca-mag').addEventListener('input',renderMag);
 $('#svuota-mag').addEventListener('click',()=>{if(!mag.length)return;const prev=mag;mag=[];renderMag();toast('Magazzino svuotato',()=>{mag=prev;renderMag()})});
+
+/* ---------- lista della spesa ---------- */
+let spesa=store.get('cc-spesa',[]);if(!Array.isArray(spesa))spesa=[];
+let finiti=store.get('cc-finiti',[]);if(!Array.isArray(finiti))finiti=[];
+let ricordi=store.get('cc-ricordi',{});if(!ricordi||typeof ricordi!=='object')ricordi={};
+let fresh=null;
+function saveSpesa(){store.set('cc-spesa',spesa);$('#c-spe').textContent=spesa.filter(x=>!x.ok).length;if(!$('#v-spesa').hidden)renderSpesa();cartBar()}
+/* quantità abituale: l'ultima comprata, oppure quella tipica */
+function usual(n){const r=ricordi[norm(n)];if(r)return r;const qk=QUICK.find(([x])=>sameIng(x,n));if(qk)return {q:qk[1],u:qk[2]};const m=findMag(n);return m?{q:'',u:m.u}:null}
+function spAdd(n,q,u){
+  n=String(n).trim().toLowerCase();if(!n)return;
+  const ex=spesa.find(x=>!x.ok&&(norm(x.n)===norm(n)||sameIng(x.n,n)));
+  if(ex){if(q!==''&&q!=null){if(ex.q===''||ex.q==null){ex.q=q;ex.u=u}else{const b=conv(num(q),u,ex.u);if(b!=null)ex.q=Math.round((num(ex.q)+b)*100)/100}}fresh=ex.id;return}
+  if(q===''||q==null){const us=usual(n);if(us){q=us.q;u=us.u}}
+  const it={id:uid(),n,q:q===''||q==null?'':q,u:u||'pz',ok:false};spesa.unshift(it);fresh=it.id;
+}
+function spRow(x){
+  const inMag=findMag(x.n);
+  return `<div class="sp${x.ok?' ok':''}${x.id===fresh?' new':''}" data-id="${esc(x.id)}">
+    <button type="button" class="ck" aria-pressed="${x.ok}" aria-label="${x.ok?'Togli dal carrello':'Messo nel carrello'}: ${esc(x.n)}"></button>
+    <span class="nm" data-a="tog">${esc(x.n)}${inMag&&!x.ok?`<small>nel magazzino: ${esc(fmt(num(inMag.q)))} ${esc(inMag.u)}</small>`:''}</span>
+    <input type="number" inputmode="decimal" min="0" step="any" value="${esc(x.q)}" placeholder="qtà" aria-label="Quantità di ${esc(x.n)}" data-f="q">
+    <select aria-label="Unità di ${esc(x.n)}" data-f="u">${['g','kg','ml','l','pz'].map(u=>`<option${u===x.u?' selected':''}>${u}</option>`).join('')}</select>
+    <button type="button" class="del" aria-label="Togli ${esc(x.n)} dalla lista">×</button>
+  </div>`;
+}
+function renderSpesa(){
+  const todo=spesa.filter(x=>!x.ok),done=spesa.filter(x=>x.ok);
+  let h='';
+  if(!spesa.length)h=`<div class="slist">${emptyArt('La lista è vuota. Scrivi qui sopra cosa ti serve, oppure tocca un suggerimento.')}</div>`;
+  else{
+    if(todo.length)h+=`<div class="grp">Da comprare <b>${todo.length}</b></div><div class="slist">${todo.map(spRow).join('')}</div>`;
+    else h+=`<div class="grp">Da comprare <b>0</b></div><div class="slist"><div class="emptybox">Hai preso tutto! Ora premi “Metti nel magazzino”.</div></div>`;
+    if(done.length)h+=`<div class="grp">Nel carrello <b>${done.length}</b><button type="button" id="uncheck">Togli le spunte</button></div><div class="slist">${done.map(spRow).join('')}</div>`;
+  }
+  $('#slist').innerHTML=h;fresh=null;
+  /* suggerimenti */
+  const inList=n=>spesa.some(x=>!x.ok&&sameIng(x.n,n));
+  const low=mag.filter(x=>isLow(x)&&!inList(x.n)).map(x=>x.n);
+  const fin=finiti.filter(n=>!inList(n)&&!mag.some(m=>sameIng(m.n,n)&&!isLow(m)));
+  const often=QUICK.map(([n])=>n).filter(n=>!inList(n)&&!mag.some(m=>sameIng(m.n,n))&&!fin.includes(n)).slice(0,8);
+  const grp=(t,list,col)=>list.length?`<div class="sg"><span>${t}</span>${list.map(n=>`<button type="button" data-n="${esc(n)}" style="--c:${col}">${esc(n)}</button>`).join('')}</div>`:'';
+  $('#ssugg').innerHTML=grp('Finiti',fin,'var(--red)')+grp('Quasi finiti',low,'var(--ora)')+grp('Ti mancano',often,'var(--pink)');
+  $('#c-spe').textContent=todo.length;
+}
+function cartBar(){
+  const n=spesa.filter(x=>x.ok).length,show=n>0&&!$('#v-spesa').hidden;
+  $('#cartbar').hidden=!show;document.body.classList.toggle('hasbar',show);
+  if(show)$('#cartn').innerHTML=`<b>${n}</b> nel carrello`;
+}
+$('#sadd').addEventListener('submit',e=>{
+  e.preventDefault();
+  const names=$('#snome').value.split(/[,;]/).map(s=>s.trim()).filter(Boolean);
+  const q=$('#sqta').value===''?'':num($('#sqta').value),u=$('#sunita').value;
+  names.forEach(n=>spAdd(n,names.length>1?'':q,u));
+  $('#snome').value='';$('#sqta').value='';$('#sunita').value='pz';saveSpesa();$('#snome').focus();
+});
+$('#ssugg').addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;spAdd(b.dataset.n,'','pz');saveSpesa()});
+$('#slist').addEventListener('click',e=>{
+  if(e.target.closest('#uncheck')){spesa.forEach(x=>x.ok=false);saveSpesa();return}
+  const row=e.target.closest('.sp');if(!row)return;const it=spesa.find(x=>x.id===row.dataset.id);if(!it)return;
+  if(e.target.closest('.del')){const prev=JSON.parse(JSON.stringify(spesa));spesa=spesa.filter(x=>x!==it);saveSpesa();toast(`Tolto ${it.n} dalla lista`,()=>{spesa=prev;saveSpesa()});return}
+  if(e.target.closest('.ck')||e.target.closest('[data-a=tog]')){
+    it.ok=!it.ok;if(it.ok)burst(row.querySelector('.ck'),['#FFD900','#F0A21A']);
+    /* l'elemento spuntato scende nel carrello */
+    row.classList.toggle('ok',it.ok);setTimeout(saveSpesa,it.ok?260:0);
+  }
+});
+$('#slist').addEventListener('change',e=>{
+  const row=e.target.closest('.sp');if(!row)return;const it=spesa.find(x=>x.id===row.dataset.id);if(!it)return;
+  if(e.target.dataset.f==='q')it.q=e.target.value===''?'':Math.max(0,num(e.target.value));
+  if(e.target.dataset.f==='u')it.u=e.target.value;
+  store.set('cc-spesa',spesa);
+});
+$('#svuota-spe').addEventListener('click',()=>{if(!spesa.length)return;const prev=spesa;spesa=[];saveSpesa();toast('Lista svuotata',()=>{spesa=prev;saveSpesa()})});
+$('#copia-spe').addEventListener('click',e=>{
+  const todo=spesa.filter(x=>!x.ok);if(!todo.length){toast('Non c\'è niente da comprare');return}
+  const b=e.target;copy('Lista della spesa\n'+todo.map(x=>`- ${x.n}${x.q!==''?` ${fmt(num(x.q))} ${x.u}`:''}`).join('\n'),b);
+  setTimeout(()=>b.textContent='Copia la lista',2000);
+});
+/* dal carrello al magazzino */
+function intoMag(list){
+  const prevMag=JSON.parse(JSON.stringify(mag)),prevSp=JSON.parse(JSON.stringify(spesa)),prevR={...ricordi},prevF=finiti.slice();
+  list.forEach(x=>{addItem(x.n,num(x.q),x.u);ricordi[norm(x.n)]={q:num(x.q),u:x.u}});
+  finiti=finiti.filter(n=>!list.some(x=>sameIng(x.n,n)));store.set('cc-finiti',finiti);store.set('cc-ricordi',ricordi);
+  const ids=new Set(list.map(x=>x.id));spesa=spesa.filter(x=>!ids.has(x.id));saveSpesa();
+  burst($('#intomag'),['#FFD900','#F0A21A','#E3170A','#F4B6C6']);
+  toast(`${list.length===1?'1 prodotto messo':list.length+' prodotti messi'} nel magazzino`,()=>{mag=prevMag;spesa=prevSp;ricordi=prevR;finiti=prevF;store.set('cc-ricordi',ricordi);store.set('cc-finiti',finiti);renderMag();saveSpesa()});
+}
+$('#intomag').addEventListener('click',()=>{
+  const done=spesa.filter(x=>x.ok);if(!done.length)return;
+  const missing=done.filter(x=>x.q===''||!(num(x.q)>0));
+  if(!missing.length){intoMag(done);return}
+  $('#shrows').innerHTML=missing.map(x=>`<div class="srow" data-id="${esc(x.id)}"><b>${esc(x.n)}</b><input type="number" inputmode="decimal" min="0" step="any" placeholder="qtà" aria-label="Quantità di ${esc(x.n)}"><select aria-label="Unità di ${esc(x.n)}">${['g','kg','ml','l','pz'].map(u=>`<option${u===x.u?' selected':''}>${u}</option>`).join('')}</select></div>`).join('');
+  $('#sheet').hidden=false;const f=$('#shrows input');if(f)f.focus();
+});
+$('#shno').addEventListener('click',()=>$('#sheet').hidden=true);
+$('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')$('#sheet').hidden=true});
+$('#shok').addEventListener('click',()=>{
+  let ok=true;
+  document.querySelectorAll('#shrows .srow').forEach(r=>{const it=spesa.find(x=>x.id===r.dataset.id);const inp=r.querySelector('input');const v=num(inp.value);
+    if(!(v>0)){ok=false;inp.style.borderColor='var(--red)';return}inp.style.borderColor='';if(it){it.q=v;it.u=r.querySelector('select').value}});
+  if(!ok)return;
+  $('#sheet').hidden=true;intoMag(spesa.filter(x=>x.ok));
+});
+$('#shrows').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const ins=[...document.querySelectorAll('#shrows input')];const i=ins.indexOf(e.target);if(i>=0&&i<ins.length-1)ins[i+1].focus();else $('#shok').click()}});
 
 /* unità */
 const BASE={g:['g',1],kg:['g',1000],ml:['ml',1],l:['ml',1000],pz:['pz',1]};
@@ -382,6 +492,7 @@ function card(r,mode){
     </details>
     <div class="acts">
       ${mode==='saved'?'<button type="button" class="btn-ghost sm" data-a="rimuovi">Rimuovi</button>':`<button type="button" class="sm ${sv?'saved-on':'btn-bas'}" data-a="salva" aria-pressed="${sv}">${sv?'Salvata ✓':'Mi piace, salvala'}</button>`}
+      ${ing.some(x=>x.da_comprare)?`<button type="button" class="btn-ghost sm" data-a="spesa">Aggiungi alla spesa (${ing.filter(x=>x.da_comprare).length})</button>`:''}
       <button type="button" class="btn-ghost sm" data-a="cucinata">L'ho cucinata</button>
       <button type="button" class="btn-ghost sm" data-a="copia">Copia</button>
     </div>
@@ -422,6 +533,7 @@ function cooked(r){
     it.q=Math.max(0,Math.round((num(it.q)-d)*100)/100);changed.push(it.n);
   });
   const gone=mag.filter(m=>num(m.q)<=0).map(m=>m.n);
+  if(gone.length){finiti=[...gone,...finiti.filter(n=>!gone.includes(n))].slice(0,12);store.set('cc-finiti',finiti)}
   mag=mag.filter(m=>num(m.q)>0);
   const s=saved.find(x=>x.id===r.id);if(s){s.cucinata=(s.cucinata||0)+1;saveSaved()}
   renderMag();
@@ -433,6 +545,12 @@ function onCard(e,list){
   const id=b.closest('.rec').dataset.id,r=list().find(x=>x.id===id);if(!r)return;
   const a=b.dataset.a;
   if(a==='copia')copy(asText(r),b);
+  if(a==='spesa'){
+    const prev=JSON.parse(JSON.stringify(spesa));const buy=(r.ingredienti||[]).filter(x=>x.da_comprare);
+    buy.forEach(x=>{const u=['g','kg','ml','l','pz'].includes(x.u)?x.u:'pz';spAdd(x.nome,num(x.q)>0&&x.u!=='q.b.'?num(x.q):'',u)});
+    saveSpesa();b.textContent='Nella lista ✓';burst(b,['#F0A21A','#FFD900']);
+    toast(`Aggiunti alla spesa: ${buy.map(x=>x.nome).join(', ')}`,()=>{spesa=prev;saveSpesa()});
+  }
   if(a==='cucinata'){cooked(r);burst(b,['#F0A21A','#E3170A','#FFD900','#F4B6C6'])}
   if(a==='salva'){
     if(isSaved(r)){saved=saved.filter(x=>x.id!==r.id);b.className='sm btn-bas';b.textContent='Mi piace, salvala';b.setAttribute('aria-pressed','false')}
@@ -488,7 +606,7 @@ $('#stop').addEventListener('click',()=>{if(ctl)ctl.abort()});
 $('#diagbtn').addEventListener('click',diagnose);
 $('#altre').addEventListener('click',()=>crea(true));
 
-renderMag();saveSaved();route();
+renderMag();saveSaved();saveSpesa();route();
 setTimeout(()=>{const s=$('#splash');if(s)s.remove()},2000);
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){const s=$('#splash');if(s)s.remove()}
 }
